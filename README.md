@@ -1,3 +1,5 @@
+reference design for a control surface for [neurogenic](https://github.com/EMajesty/neurogenic).
+
 ### Encoders
 
 - 1 data entry, detented (push?)
