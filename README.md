@@ -6,7 +6,9 @@
 ### Buttons
 
 #### Navigation
-left/right/enter/cancel
+left
+right
+enter
 back (home)
 (track- (bank-))
 (track+ (bank+))
@@ -20,7 +22,14 @@ undo (redo)
 save (save as)
 
 #### Modes
-seq, sample, slice, mix, fx, song, browse, setup, ...)
+seq
+sample
+slice
+mix
+fx
+song
+browse
+setup
 step
 pad
 note
