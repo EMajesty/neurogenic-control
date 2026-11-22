@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "majestic")(type "KiCad")(uri "/home/emaj/git/neurogenic-control/shared/majestic-kicad/majestic.pretty")(options "")(descr ""))
+)

@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "majestic")(type "KiCad")(uri "/home/emaj/git/majestic-kicad/symbols/majestic.kicad_sym")(options "")(descr ""))
+)
