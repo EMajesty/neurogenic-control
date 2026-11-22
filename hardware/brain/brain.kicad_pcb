@@ -72,9 +72,9 @@
 			(subtractmaskfromsilk no)
 			(outputformat 1)
 			(mirror no)
-			(drillshape 1)
+			(drillshape 0)
 			(scaleselection 1)
-			(outputdirectory "")
+			(outputdirectory "./gerbers")
 		)
 	)
 	(net 0 "")
@@ -830,7 +830,6 @@
 			)
 			(fill no)
 			(layer "Cmts.User")
-			(net 63)
 			(uuid "21379951-fd85-4089-b64b-48bd69792a7b")
 		)
 		(fp_circle
@@ -842,7 +841,6 @@
 			)
 			(fill no)
 			(layer "F.CrtYd")
-			(net 63)
 			(uuid "59d327ae-a0d5-42d5-ae16-5cb93b7b6e2b")
 		)
 		(pad "" np_thru_hole circle
@@ -3866,7 +3864,7 @@
 		(descr "CP, Radial series, Radial, pin pitch=2.00mm, diameter=4mm, height=7mm, Electrolytic Capacitor")
 		(tags "CP Radial series Radial pin pitch 2.00mm diameter 4mm height 7mm Electrolytic Capacitor")
 		(property "Reference" "C2"
-			(at 5.08 0 0)
+			(at -1.27 -2.54 0)
 			(layer "F.SilkS")
 			(uuid "359c2c98-eb07-4767-8bcb-a00862443d69")
 			(effects
@@ -8215,7 +8213,6 @@
 			)
 			(fill no)
 			(layer "Cmts.User")
-			(net 1350071312)
 			(uuid "709c6c5a-8f6a-4e8d-ab18-7ddca5946dcd")
 		)
 		(fp_circle
@@ -8227,7 +8224,6 @@
 			)
 			(fill no)
 			(layer "F.CrtYd")
-			(net 1350071312)
 			(uuid "d6a46e1e-ef8c-4d31-be95-57b9089a8669")
 		)
 		(pad "" np_thru_hole circle
@@ -9941,7 +9937,7 @@
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor handsolder")
 		(property "Reference" "R2"
-			(at 0 1.65 90)
+			(at 2.54 0 180)
 			(layer "B.SilkS")
 			(uuid "1f84b448-6b2f-4dbe-b7b8-f6e71fbf0a9a")
 			(effects
@@ -10651,7 +10647,7 @@
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
 		(tags "capacitor handsolder")
 		(property "Reference" "C1"
-			(at 0 1.68 0)
+			(at 0 -2.54 0)
 			(layer "B.SilkS")
 			(uuid "a58d4089-00d0-426d-9dbb-1ae9dc131efe")
 			(effects
@@ -13355,11 +13351,11 @@
 				(xy 48.144185 117.786058) (xy 48.196989 117.740303) (xy 48.266147 117.730359) (xy 48.329703 117.759384)
 				(xy 48.336181 117.765416) (xy 49.178139 118.607374) (xy 49.178149 118.607385) (xy 49.182479 118.611715)
 				(xy 49.18248 118.611716) (xy 49.294284 118.72352) (xy 49.381095 118.773639) (xy 49.381097 118.773641)
-				(xy 49.419151 118.795611) (xy 49.431215 118.802577) (xy 49.583943 118.8435) (xy 49.742057 118.8435)
-				(xy 77.250331 118.8435) (xy 77.250347 118.843501) (xy 77.257943 118.843501) (xy 77.416054 118.843501)
-				(xy 77.416057 118.843501) (xy 77.568785 118.802577) (xy 77.618904 118.773639) (xy 77.705716 118.72352)
-				(xy 77.81752 118.611716) (xy 77.81752 118.611714) (xy 77.827728 118.601507) (xy 77.827729 118.601504)
-				(xy 83.527821 112.901413) (xy 83.589142 112.86793)
+				(xy 49.419151 118.795611) (xy 49.431215 118.802577) (xy 49.583943 118.8435) (xy 77.250331 118.8435)
+				(xy 77.250347 118.843501) (xy 77.257943 118.843501) (xy 77.416054 118.843501) (xy 77.416057 118.843501)
+				(xy 77.568785 118.802577) (xy 77.618904 118.773639) (xy 77.705716 118.72352) (xy 77.81752 118.611716)
+				(xy 77.81752 118.611714) (xy 77.827728 118.601507) (xy 77.827729 118.601504) (xy 83.527821 112.901413)
+				(xy 83.589142 112.86793)
 			)
 		)
 		(filled_polygon
