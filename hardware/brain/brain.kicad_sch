@@ -1346,6 +1346,156 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Diode:1N5817"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "D"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "1N5817"
+				(at 0 -2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal"
+				(at 0 -4.445 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "http://www.vishay.com/docs/88525/1n5817.pdf"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "20V 1A Schottky Barrier Rectifier Diode, DO-41"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "diode Schottky"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "D*DO?41*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "1N5817_0_1"
+				(polyline
+					(pts
+						(xy -1.905 0.635) (xy -1.905 1.27) (xy -1.27 1.27) (xy -1.27 -1.27) (xy -0.635 -1.27) (xy -0.635 -0.635)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 1.27) (xy 1.27 -1.27) (xy -1.27 0) (xy 1.27 1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 0) (xy -1.27 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "1N5817_1_1"
+				(pin passive line
+					(at -3.81 0 0)
+					(length 2.54)
+					(name "K"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "MCU_Module:RaspberryPi_Pico"
 			(pin_names
 				(offset 0.762)
@@ -3328,6 +3478,26 @@
 	)
 	(wire
 		(pts
+			(xy 25.4 92.71) (xy 25.4 97.79)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9380c770-d027-4e74-9637-c8509f9d5f2f")
+	)
+	(wire
+		(pts
+			(xy 22.86 90.17) (xy 30.48 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "94351aa0-9b27-4af6-a7df-785bb139775d")
+	)
+	(wire
+		(pts
 			(xy 224.79 57.15) (xy 208.28 57.15)
 		)
 		(stroke
@@ -3378,6 +3548,16 @@
 	)
 	(wire
 		(pts
+			(xy 30.48 92.71) (xy 25.4 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cd5e95c9-6e7c-40c0-a64d-e65079a6cda3")
+	)
+	(wire
+		(pts
 			(xy 149.86 25.4) (xy 147.32 25.4)
 		)
 		(stroke
@@ -3385,6 +3565,16 @@
 			(type default)
 		)
 		(uuid "cddcd307-0abb-4821-9584-425ff0c4f16e")
+	)
+	(wire
+		(pts
+			(xy 22.86 90.17) (xy 22.86 97.79)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e23e8342-f05e-4f36-8765-4a8f2dc0a107")
 	)
 	(wire
 		(pts
@@ -3572,7 +3762,7 @@
 	)
 	(global_label "SCAN_CLK"
 		(shape input)
-		(at 30.48 90.17 180)
+		(at 22.86 105.41 270)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -3582,7 +3772,7 @@
 		)
 		(uuid "30846f1c-7b7c-4db4-8fc8-7e33aa546f8c")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 18.0605 90.17 0)
+			(at 22.86 117.8295 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4496,7 +4686,7 @@
 	)
 	(global_label "SCAN_LOAD"
 		(shape input)
-		(at 30.48 92.71 180)
+		(at 25.4 105.41 270)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -4506,7 +4696,7 @@
 		)
 		(uuid "f4c2e0f7-73a5-4d1d-9ff7-297f6f4c6a66")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 16.9114 92.71 0)
+			(at 25.4 118.9786 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5885,6 +6075,142 @@
 			(project "brain"
 				(path "/f0305698-488a-4a4f-8676-48922a489aef"
 					(reference "J10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 48.26 24.13 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3a187acc-893e-48e8-95be-20a5671889c8")
+		(property "Reference" "#PWR059"
+			(at 48.26 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 48.26 19.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 48.26 24.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 48.26 24.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 48.26 24.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "6792153b-9bd7-43db-81aa-244efa7f70c1")
+		)
+		(instances
+			(project "brain"
+				(path "/f0305698-488a-4a4f-8676-48922a489aef"
+					(reference "#PWR059")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 22.86 101.6 0)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "3df4a50f-2a60-4b10-b933-d12f61cd2146")
+		(property "Reference" "R4"
+			(at 20.32 100.3299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "33R"
+			(at 20.32 102.8699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 21.082 101.6 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 22.86 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 22.86 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0f3bb146-9b59-4bd1-aa19-a7c006ffab87")
+		)
+		(pin "2"
+			(uuid "9f04901e-5432-4757-a332-6ac140b004d7")
+		)
+		(instances
+			(project "brain"
+				(path "/f0305698-488a-4a4f-8676-48922a489aef"
+					(reference "R4")
 					(unit 1)
 				)
 			)
@@ -7270,6 +7596,75 @@
 		)
 	)
 	(symbol
+		(lib_id "Diode:1N5817")
+		(at 48.26 27.94 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5a7f2e5b-0b65-4c9e-be4e-c42645e70938")
+		(property "Reference" "D1"
+			(at 45.72 26.9874 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1N5817"
+			(at 45.72 29.5274 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal"
+			(at 52.705 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.vishay.com/docs/88525/1n5817.pdf"
+			(at 48.26 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "20V 1A Schottky Barrier Rectifier Diode, DO-41"
+			(at 48.26 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b3c0513c-beb0-4f61-b553-43fd246f271a")
+		)
+		(pin "2"
+			(uuid "e5b6920a-8a36-47b0-87f1-5b040a1fdb94")
+		)
+		(instances
+			(project ""
+				(path "/f0305698-488a-4a4f-8676-48922a489aef"
+					(reference "D1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector_Generic:Conn_02x05_Odd_Even")
 		(at 200.66 100.33 0)
 		(unit 1)
@@ -8339,6 +8734,76 @@
 			(project "brain"
 				(path "/f0305698-488a-4a4f-8676-48922a489aef"
 					(reference "#PWR053")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 25.4 101.6 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8a221145-b92f-4d62-8c89-953ac7aa31ba")
+		(property "Reference" "R3"
+			(at 27.94 100.3299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "33R"
+			(at 27.94 102.8699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 27.178 101.6 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 25.4 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 25.4 101.6 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "035b9b6f-b2a8-4cbc-ac69-41f693ecf3ce")
+		)
+		(pin "2"
+			(uuid "de46dc74-5edc-47b5-bfe9-bc9b6dd30f5d")
+		)
+		(instances
+			(project "brain"
+				(path "/f0305698-488a-4a4f-8676-48922a489aef"
+					(reference "R3")
 					(unit 1)
 				)
 			)
