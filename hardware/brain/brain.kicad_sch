@@ -2364,6 +2364,89 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Mechanical:MountingHole"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom no)
+			(on_board yes)
+			(property "Reference" "H"
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "MountingHole"
+				(at 0 3.175 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Mounting Hole without connection"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "mounting hole"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "MountingHole*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "MountingHole_0_1"
+				(circle
+					(center 0 0)
+					(radius 1.27)
+					(stroke
+						(width 1.27)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "majestic:Recom_R78K"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -2994,20 +3077,20 @@
 		(uuid "1e638541-c985-43f8-b25f-428922c7bc59")
 	)
 	(no_connect
-		(at 247.65 81.28)
-		(uuid "6ff880aa-7e66-4bb2-b84f-353de34769f6")
+		(at 260.35 102.87)
+		(uuid "27a9a37d-5518-43c9-b3da-a43a93bdbe70")
 	)
 	(no_connect
-		(at 247.65 102.87)
-		(uuid "96476a20-f70d-4a98-838c-65bef82cadc9")
+		(at 247.65 81.28)
+		(uuid "6ff880aa-7e66-4bb2-b84f-353de34769f6")
 	)
 	(no_connect
 		(at 195.58 102.87)
 		(uuid "9d186bc8-1dd8-4456-9058-d426e38175a8")
 	)
 	(no_connect
-		(at 260.35 102.87)
-		(uuid "ce02bc95-5a42-492b-937c-70d7ca26c650")
+		(at 247.65 102.87)
+		(uuid "ac78ee3d-7511-41a3-a1e4-698ddad48694")
 	)
 	(no_connect
 		(at 247.65 38.1)
@@ -3072,6 +3155,26 @@
 			(type default)
 		)
 		(uuid "338fa40f-7e52-4fc2-95ce-c69c5fdba68f")
+	)
+	(wire
+		(pts
+			(xy 276.86 100.33) (xy 260.35 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "349dd812-594f-4644-b65d-57cb495f79d7")
+	)
+	(wire
+		(pts
+			(xy 276.86 81.28) (xy 276.86 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "34ce2fe8-d2a3-4337-9a43-ee53f051ddb0")
 	)
 	(wire
 		(pts
@@ -3145,16 +3248,6 @@
 	)
 	(wire
 		(pts
-			(xy 276.86 100.33) (xy 260.35 100.33)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4fc73901-3c3b-4e69-8b77-faefcf3bd7b4")
-	)
-	(wire
-		(pts
 			(xy 90.17 72.39) (xy 95.25 72.39)
 		)
 		(stroke
@@ -3225,13 +3318,13 @@
 	)
 	(wire
 		(pts
-			(xy 276.86 81.28) (xy 276.86 100.33)
+			(xy 260.35 81.28) (xy 276.86 81.28)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "8a919298-71f4-45bd-9859-54014f0e4dd3")
+		(uuid "8919b0bf-b2e2-47d4-883b-93da98bfbfd0")
 	)
 	(wire
 		(pts
@@ -3305,16 +3398,6 @@
 	)
 	(wire
 		(pts
-			(xy 260.35 81.28) (xy 276.86 81.28)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f7b08a86-916e-4dbb-b612-b4bc056e991f")
-	)
-	(wire
-		(pts
 			(xy 276.86 38.1) (xy 276.86 57.15)
 		)
 		(stroke
@@ -3346,6 +3429,28 @@
 		(uuid "04a085b2-30ea-4d40-abeb-46c42fe88dd0")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 221.8486 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "SCAN_LOAD"
+		(shape input)
+		(at 260.35 119.38 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "0a0d6bec-f7f5-462a-b1df-fb3d14771dee")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 273.9186 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3553,6 +3658,28 @@
 			)
 		)
 	)
+	(global_label "ENC_LED_BLANK"
+		(shape input)
+		(at 76.2 64.77 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "3e737c5a-5ecd-46f2-8718-8b7d9b7aad59")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 94.3042 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "BUTTON_DATA5"
 		(shape input)
 		(at 247.65 35.56 180)
@@ -3566,6 +3693,28 @@
 		(uuid "3f70813c-f303-48ed-860b-d710bb4af8f8")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 230.8762 35.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "BUTTON_DATA9"
+		(shape input)
+		(at 247.65 121.92 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "407c99c0-864c-47da-8f81-17cd26767e32")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 230.8762 121.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3637,6 +3786,28 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "ENC_LED_BLANK"
+		(shape input)
+		(at 260.35 124.46 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5f739155-09f6-4f36-bfa5-760fcb94c530")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 278.4542 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 				(hide yes)
 			)
 		)
@@ -3751,6 +3922,28 @@
 			)
 		)
 	)
+	(global_label "ENC_LED_DATA"
+		(shape input)
+		(at 260.35 121.92 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "84224a1c-1d8f-41b5-bb84-7b90d4dac7ec")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 276.8818 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "BUTTON_DATA1"
 		(shape input)
 		(at 195.58 35.56 180)
@@ -3852,6 +4045,50 @@
 		(uuid "a13df51f-3dd3-4af2-b1be-3d153fcc0ee8")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 183.1605 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "ENC_LED_DATA"
+		(shape input)
+		(at 76.2 69.85 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a42c333c-5e0d-4212-a245-b2050876b1bb")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 92.7318 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "SCAN_CLK"
+		(shape input)
+		(at 247.65 119.38 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "a4a58775-f08c-41d6-9535-6abeb003a1e3")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 235.2305 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4059,6 +4296,50 @@
 			)
 		)
 	)
+	(global_label "ENC_LED_LATCH"
+		(shape input)
+		(at 247.65 124.46 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "c90a3de9-dcf3-4845-a195-4ebe9c7f9875")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 229.8482 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "BUTTON_DATA9"
+		(shape input)
+		(at 76.2 67.31 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d0e7ce12-dcf2-4b2e-b618-91479116ba0c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 92.9738 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "SCAN_CLK"
 		(shape input)
 		(at 247.65 97.79 180)
@@ -4138,6 +4419,28 @@
 		(uuid "de872ee5-8c19-4e56-84fd-439107f0f053")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 221.8486 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "ENC_LED_LATCH"
+		(shape input)
+		(at 76.2 62.23 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e469a714-5db3-44a5-9c78-bba6994df263")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 94.0018 62.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4455,6 +4758,70 @@
 			(project ""
 				(path "/f0305698-488a-4a4f-8676-48922a489aef"
 					(reference "R2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 195.58 143.51 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "14d0ac84-3e65-4417-a559-18120175f1ad")
+		(property "Reference" "H4"
+			(at 198.12 142.2399 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 198.12 144.7799 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
+			(at 195.58 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 195.58 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 195.58 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "brain"
+				(path "/f0305698-488a-4a4f-8676-48922a489aef"
+					(reference "H4")
 					(unit 1)
 				)
 			)
@@ -5426,6 +5793,98 @@
 			(project "brain"
 				(path "/f0305698-488a-4a4f-8676-48922a489aef"
 					(reference "#PWR042")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_02x05_Odd_Even")
+		(at 252.73 121.92 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "38aa81ff-d18d-4cb8-ac3e-9bf77a5f23d0")
+		(property "Reference" "J10"
+			(at 254 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "ENCODERS"
+			(at 254 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_IDC:IDC-Header_2x05_P2.54mm_Vertical"
+			(at 252.73 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 252.73 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, double row, 02x05, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 252.73 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "5"
+			(uuid "7dd680f9-d089-4ed9-99f7-5bff42c0f293")
+		)
+		(pin "10"
+			(uuid "ee7f3186-af2e-49ad-9e1c-f590778fbea9")
+		)
+		(pin "7"
+			(uuid "a262db0b-295e-492a-9317-f91c3b9b3d95")
+		)
+		(pin "8"
+			(uuid "d4181609-21b3-4921-8b41-861cba9c345f")
+		)
+		(pin "6"
+			(uuid "ef6df2dc-f208-41bd-b96b-87ace7af1e13")
+		)
+		(pin "4"
+			(uuid "a743d026-1d10-407c-ba56-7d187de19193")
+		)
+		(pin "9"
+			(uuid "881cc612-62bc-4e75-9daf-789d26b88d6c")
+		)
+		(pin "2"
+			(uuid "2663de69-9ac2-48e9-b33e-98a3966d3343")
+		)
+		(pin "3"
+			(uuid "a49c4e15-3469-439b-99c7-b119387b7843")
+		)
+		(pin "1"
+			(uuid "a0de626b-6eac-451b-9ac4-03d3cbc48888")
+		)
+		(instances
+			(project "brain"
+				(path "/f0305698-488a-4a4f-8676-48922a489aef"
+					(reference "J10")
 					(unit 1)
 				)
 			)
@@ -7129,6 +7588,73 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 247.65 116.84 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "6e0a6e47-5685-40d3-9537-5a7404a33351")
+		(property "Reference" "#PWR057"
+			(at 241.3 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 243.84 116.8399 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 247.65 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 247.65 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 247.65 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c874e6bf-85a7-4f06-84cb-5cf97bab8975")
+		)
+		(instances
+			(project "brain"
+				(path "/f0305698-488a-4a4f-8676-48922a489aef"
+					(reference "#PWR057")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+5V")
 		(at 260.35 62.23 270)
 		(unit 1)
@@ -7551,6 +8077,70 @@
 			(project ""
 				(path "/f0305698-488a-4a4f-8676-48922a489aef"
 					(reference "C2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 195.58 128.27 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "801fa350-e296-4543-9473-1e9342c1eca4")
+		(property "Reference" "H1"
+			(at 198.12 126.9999 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 198.12 129.5399 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
+			(at 195.58 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 195.58 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 195.58 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project ""
+				(path "/f0305698-488a-4a4f-8676-48922a489aef"
+					(reference "H1")
 					(unit 1)
 				)
 			)
@@ -8022,6 +8612,73 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+3.3V")
+		(at 260.35 116.84 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "91b6e12c-b888-4355-9713-408443da3382")
+		(property "Reference" "#PWR055"
+			(at 256.54 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3.3V"
+			(at 264.16 116.8399 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 260.35 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 260.35 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+			(at 260.35 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fd7ea4d4-0f83-40b1-ac69-59b546d43172")
+		)
+		(instances
+			(project "brain"
+				(path "/f0305698-488a-4a4f-8676-48922a489aef"
+					(reference "#PWR055")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "majestic:Recom_R78K")
 		(at 138.43 25.4 0)
 		(unit 1)
@@ -8087,6 +8744,73 @@
 			(project ""
 				(path "/f0305698-488a-4a4f-8676-48922a489aef"
 					(reference "U2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 247.65 127 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9a389334-1bb8-4e8e-9644-baa118b7e77f")
+		(property "Reference" "#PWR058"
+			(at 241.3 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 243.84 126.9999 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 247.65 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 247.65 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 247.65 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d8eaca3f-62d2-4d5e-a0df-a763db0ad1f8")
+		)
+		(instances
+			(project "brain"
+				(path "/f0305698-488a-4a4f-8676-48922a489aef"
+					(reference "#PWR058")
 					(unit 1)
 				)
 			)
@@ -9107,6 +9831,73 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+5V")
+		(at 260.35 127 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "da2f9144-4d9f-4cd9-bbb4-1dcd9f25f3ca")
+		(property "Reference" "#PWR056"
+			(at 256.54 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 264.16 126.9999 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 260.35 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 260.35 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 260.35 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "98e410d3-f00c-4489-a0e4-5e880df5fe8f")
+		)
+		(instances
+			(project "brain"
+				(path "/f0305698-488a-4a4f-8676-48922a489aef"
+					(reference "#PWR056")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "74xx:74AHCT125")
 		(at 96.52 139.7 0)
 		(mirror x)
@@ -9339,6 +10130,134 @@
 			(project "brain"
 				(path "/f0305698-488a-4a4f-8676-48922a489aef"
 					(reference "#PWR08")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 195.58 138.43 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e34aea78-db22-4324-86d6-c3f5cdb79c9f")
+		(property "Reference" "H3"
+			(at 198.12 137.1599 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 198.12 139.6999 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
+			(at 195.58 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 195.58 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 195.58 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "brain"
+				(path "/f0305698-488a-4a4f-8676-48922a489aef"
+					(reference "H3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 195.58 133.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e4c8bb60-84bb-4030-91ba-d1511d476127")
+		(property "Reference" "H2"
+			(at 198.12 132.0799 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 198.12 134.6199 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
+			(at 195.58 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 195.58 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 195.58 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "brain"
+				(path "/f0305698-488a-4a4f-8676-48922a489aef"
+					(reference "H2")
 					(unit 1)
 				)
 			)
