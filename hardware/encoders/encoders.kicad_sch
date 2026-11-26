@@ -3619,22 +3619,22 @@
 	)
 	(global_label "LED_LATCH"
 		(shape input)
-		(at 269.24 139.7 270)
+		(at 275.59 132.08 90)
 		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right)
+			(justify left)
 		)
 		(uuid "3577f5d4-2174-4027-a562-cbf05c24e381")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 269.24 152.7847 90)
+			(at 275.59 118.9953 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 				(hide yes)
 			)
 		)
@@ -9532,72 +9532,6 @@
 	)
 	(symbol
 		(lib_id "power:+3.3V")
-		(at 269.24 132.08 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "4c51e82f-ad9d-4bf1-b8df-1ca9000c2bf6")
-		(property "Reference" "#PWR064"
-			(at 269.24 135.89 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+3.3V"
-			(at 269.24 127 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 269.24 132.08 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 269.24 132.08 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
-			(at 269.24 132.08 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "bb6fbd1f-51b1-4051-aa32-069ca46dc5e1")
-		)
-		(instances
-			(project "encoders"
-				(path "/be9cb0a0-3ed9-4d03-b63e-7f2667e65715"
-					(reference "#PWR064")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3.3V")
 		(at 186.69 87.63 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12144,6 +12078,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 275.59 139.7 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a2027d67-1eb8-4fd4-9bc4-91bab526b295")
+		(property "Reference" "#PWR064"
+			(at 275.59 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 275.59 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 275.59 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 275.59 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 275.59 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "35233ba4-b72e-4977-86c9-ce200b42ff0c")
+		)
+		(instances
+			(project "encoders"
+				(path "/be9cb0a0-3ed9-4d03-b63e-7f2667e65715"
+					(reference "#PWR064")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R")
 		(at 205.74 91.44 0)
 		(unit 1)
@@ -13967,7 +13967,8 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 269.24 135.89 0)
+		(at 275.59 135.89 0)
+		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -13975,7 +13976,7 @@
 		(dnp no)
 		(uuid "e3b20aec-8b7e-4ec4-8d8a-81778e39e2b0")
 		(property "Reference" "R35"
-			(at 268.224 121.412 0)
+			(at 278.384 136.906 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13984,7 +13985,7 @@
 			)
 		)
 		(property "Value" "10K"
-			(at 267.716 123.952 0)
+			(at 277.876 134.366 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13993,7 +13994,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
-			(at 267.462 135.89 90)
+			(at 273.812 135.89 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14002,7 +14003,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 269.24 135.89 0)
+			(at 275.59 135.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14011,7 +14012,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 269.24 135.89 0)
+			(at 275.59 135.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14270,7 +14271,7 @@
 		(dnp no)
 		(uuid "edd28e61-53ff-406e-a529-5e8cd07a98e2")
 		(property "Reference" "R34"
-			(at 263.144 121.412 0)
+			(at 266.954 134.874 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14279,7 +14280,7 @@
 			)
 		)
 		(property "Value" "10K"
-			(at 262.636 123.952 0)
+			(at 266.446 137.414 0)
 			(effects
 				(font
 					(size 1.27 1.27)
