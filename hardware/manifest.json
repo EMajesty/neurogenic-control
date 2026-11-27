@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "hardware_baseline": "dfa14009539741f9b325898556ced2ca027bf737",
+  "upstream_protocol": {"repository": "https://github.com/EMajesty/neurogenic", "commit": "40d5b94318f9623b74d0350a8bef749cefa7947b", "header": "include/neurogenic/controller_v2_wire.h", "major": 1, "minor": 3, "inventory_count": 67, "fingerprint": "0x3256434e"},
+  "power": {"input": "+12V", "logic": "+3.3V", "illumination": "+5V", "illumination_regulator": "U2 Recom R-78K5.0-2.0 nominal 2A", "ground": "GND"},
+  "gpio": {
+    "SCAN_CLK": 14, "SCAN_LOAD": 15,
+    "BUTTON_DATA1": 13, "BUTTON_DATA2": 12, "BUTTON_DATA3": 11,
+    "BUTTON_DATA4": 10, "BUTTON_DATA5": 9, "BUTTON_DATA6": 8,
+    "BUTTON_DATA7": 7, "BUTTON_DATA8": 6, "BUTTON_DATA9": 20,
+    "ENC_LED_DATA": 21, "RGB_DATA_RAW": 22, "ENC_LED_LATCH": 18,
+    "ENC_LED_BLANK": 19, "ANALOG1": 28, "ANALOG2": 27, "ANALOG3": 26
+  },
+  "module_connector_pinout": {"1":"GND","2":"+3.3V","3":"SCAN_CLK","4":"SCAN_LOAD","5":"BUTTON_DATA","6":"RGB_DIN","7":"OPTIONAL_ANALOG_OR_NC","8":"RGB_DOUT","9":"GND","10":"+5V"},
+  "brain_ports": [
+    {"id":"brain.J1","data":"BUTTON_DATA1","rgb_in":"RGB_DIN1","analog":"ANALOG1","rgb_out":"Net-(J1-Pin_8)"},
+    {"id":"brain.J2","data":"BUTTON_DATA2","rgb_in":"Net-(J1-Pin_8)","analog":"ANALOG2","rgb_out":"Net-(J2-Pin_8)"},
+    {"id":"brain.J3","data":"BUTTON_DATA3","rgb_in":"Net-(J2-Pin_8)","analog":"ANALOG3","rgb_out":"Net-(J3-Pin_8)"},
+    {"id":"brain.J4","data":"BUTTON_DATA4","rgb_in":"Net-(J3-Pin_8)","analog":null,"rgb_out":"Net-(J4-Pin_8)"},
+    {"id":"brain.J5","data":"BUTTON_DATA5","rgb_in":"Net-(J4-Pin_8)","analog":null,"rgb_out":"Net-(J5-Pin_8)"},
+    {"id":"brain.J6","data":"BUTTON_DATA6","rgb_in":"Net-(J5-Pin_8)","analog":null,"rgb_out":"Net-(J6-Pin_8)"},
+    {"id":"brain.J7","data":"BUTTON_DATA7","rgb_in":"Net-(J6-Pin_8)","analog":null,"rgb_out":"Net-(J7-Pin_8)"},
+    {"id":"brain.J8","data":"BUTTON_DATA8","rgb_in":"Net-(J7-Pin_8)","analog":null,"rgb_out":null}
+  ],
+  "encoder_connector": {"id":"brain.J10/encoders.J1","pins":{"1":"GND","2":"+3.3V","3":"SCAN_CLK","4":"SCAN_LOAD","5":"BUTTON_DATA9","6":"ENC_LED_DATA","7":"ENC_LED_LATCH","8":"ENC_LED_BLANK","9":"GND","10":"+5V"}},
+  "board_types": {
+    "buttons-1x8":{"registers":[{"ref":"U1","serial_out":"BUTTON_DATA","serial_in":"GND","bits":["SW7","SW6","SW5","SW8","SW1","SW4","SW3","SW2"]}],"active_low":true,"rgb_order":["LED1","LED2","LED3","LED4","LED5","LED6","LED7","LED8"]},
+    "buttons-2x5":{"registers":[{"ref":"U2","serial_out":"BUTTON_DATA","serial_in":"U1.Q7","bits":["NC","NC","NC","SW10","SW9","SW8","SW7","SW6"]},{"ref":"U1","serial_out":"U1.Q7","serial_in":"GND","bits":["NC","NC","NC","SW1","SW2","SW3","SW4","SW5"]}],"active_low":true,"rgb_order":["LED1","LED2","LED3","LED4","LED5","LED6","LED7","LED8","LED9","LED10"]},
+    "nav":{"registers":[{"ref":"U1","serial_out":"BUTTON_DATA","serial_in":"GND","bits":["SW5","SW6","SW7","DATA.S1","DATA.B","DATA.A","SW3","SW2"]}],"active_low":true,"rgb_order":["LED1","LED2","LED3","LED4","LED5","LED6"],"data_encoder":{"a":"U1.bit5","b":"U1.bit4","push":"U1.bit3","push_protocol_status":"not represented in protocol 1.3"}},
+    "pads":{"registers":[{"ref":"U2","serial_out":"BUTTON_DATA","serial_in":"U1.Q7","bits":["B16","B15","B14","B13","B12","B11","B10","B9"]},{"ref":"U1","serial_out":"U1.Q7","serial_in":"GND","bits":["B8","B7","B6","B5","B4","B3","B2","B1"]}],"active_low":true,"external_switch_connector":{"ref":"J2","controls":16},"external_led_connector":{"ref":"J3","pins":{"1":"+5V","2":"DIN","3":"GND"},"assumption":"16 separately wired arcade RGB assemblies; PCB has no LEDs"}},
+    "encoders":{"registers":[{"ref":"U4","serial_out":"BUTTON_DATA","serial_in":"U2.Q7","bits":["P6_SW","P8_SW","P2_SW","P4_SW","P3_SW","P1_SW","P7_SW","P5_SW"]},{"ref":"U2","serial_out":"U2.Q7","serial_in":"U1.Q7","bits":["P8_A","P8_B","P6_B","P6_A","P5_B","P5_A","P7_A","P7_B"]},{"ref":"U1","serial_out":"U1.Q7","serial_in":"GND","bits":["P4_A","P4_B","P2_B","P2_A","P1_B","P1_A","P3_A","P3_B"]}],"active_low":true,"push_polarity":"active-low after 15k/10k 5V-to-3.3V divider; verify thresholds physically","tlc5947":{"ref":"U3","bits_per_frame":288,"clock":"SCAN_CLK","data":"LED_DATA","latch":"LED_LATCH","blank":"LED_BLANK","iref":"R33 4.7K","outputs":["B7","G7","R7","R5","G5","B5","R3","G3","B3","R1","G1","B1","R2","G2","B2","R4","G4","B4","R6","G6","B6","B8","G8","R8"]}}
+  },
+  "rgb_buffer":{"path":"Pico GPIO22 -> brain.U1 pin2 -> pin3 -> R1 220R -> RGB_DIN1","enable":"brain.U1 pin1 tied GND","supply":"+5V"},
+  "assembly":{"button_board_instances":{"buttons-1x8":2,"buttons-2x5":2,"nav":1,"pads":1,"encoders":1},"port_assignment":"UNVERIFIED_HARNESS_ASSIGNMENT","sk6812_count":58,"encoder_rgb_count":8,"physical_inputs":{"buttons":58,"rotary_encoders":9,"optional_encoder_pushes":8}}
+}

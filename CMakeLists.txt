@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.20)
+project(neurogenic_control_host_tests LANGUAGES CXX)
+enable_testing()
+add_subdirectory(firmware)
+add_subdirectory(tests)
