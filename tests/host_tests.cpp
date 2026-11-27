@@ -129,6 +129,19 @@ int main() {
     for (size_t i = 0; i < 70; i++)
         p.feed('x');
     assert(p.feed('\n') == Command::too_long);
+    Command diagnostic = Command::invalid;
+    for (char x : std::string("info\n"))
+        diagnostic = p.feed(x);
+    assert(diagnostic == Command::info);
+    for (char x : std::string("module 8\n"))
+        diagnostic = p.feed(x);
+    assert(diagnostic == Command::module && p.args()[0] == 8);
+    for (char x : std::string("stress start 300\n"))
+        diagnostic = p.feed(x);
+    assert(diagnostic == Command::stress_start && p.args()[0] == 300);
+    for (char x : std::string("stress start 301\n"))
+        diagnostic = p.feed(x);
+    assert(diagnostic == Command::invalid);
     assert(gamma12(0) == 0 && gamma12(255) == 4095);
     LogicalLight l{255, 255, 255, 255, 255, LedState::steady};
     CurrentBudget b{20, 24, 128};
@@ -180,19 +193,79 @@ int main() {
     for (char x : std::string("led channel 23 4095\n"))
         c = lp.feed(x);
     assert(c == Command::led_channel);
-    assert(magnitude_brightness(MagnitudeMode::unipolar,0,31,255,true)==31);
-    assert(magnitude_brightness(MagnitudeMode::unipolar,65535,31,255,true)==255);
-    assert(magnitude_brightness(MagnitudeMode::bipolar,32768,31,255,true)==31);
-    assert(magnitude_brightness(MagnitudeMode::bipolar,0,31,255,true)==magnitude_brightness(MagnitudeMode::bipolar,65535,31,255,true));
-    assert(magnitude_brightness(MagnitudeMode::boolean,0,31,255,true)==31&&magnitude_brightness(MagnitudeMode::boolean,1,31,255,true)==255);
-    assert(magnitude_brightness(MagnitudeMode::enumerated,10,31,255,true)>31);
-    assert(magnitude_brightness(MagnitudeMode::unipolar,65535,31,255,false)==0);
-    Calibration cal=default_calibration();assert(validate_calibration(cal));cal.sk_gain[0]=513;assert(!validate_calibration(cal));cal=default_calibration();
-    Renderer renderer;IlluminationAuthority rendered;RenderState rs;rs.color=Palette::sound;rs.magnitude=0;rs.magnitude_mode=MagnitudeMode::unipolar;rs.operational=OperationalState::assigned;rs.temporal=TemporalMode::steady;rs.assigned=true;rs.explicit_off=false;renderer.set_encoder(0,rs,100);assert(renderer.render(140,rendered,cal));PowerPolicy conservative=default_power_policy();ElectricalFrame rf{};assert(rendered.publish(rf,conservative));assert(rf.tlc[kEncoderTlc[0][1]]>0&&rf.power.limited_ua<=conservative.limit_ua);
-    rs.magnitude=65535;renderer.set_encoder(0,rs,110);renderer.render(130,rendered,cal);assert(rendered.publish(rf,conservative));auto halfway=rf.tlc[kEncoderTlc[0][1]];renderer.render(150,rendered,cal);assert(rendered.publish(rf,conservative));assert(rf.tlc[kEncoderTlc[0][1]]>=halfway);
-    rs.magnitude_mode=MagnitudeMode::bipolar;rs.magnitude=32768;renderer.set_encoder(1,rs,UINT32_MAX-10);assert(renderer.render(20,rendered,cal));
-    renderer.all_off();assert(renderer.render(21,rendered,cal));assert(rendered.publish(rf,conservative));for(auto v:rf.sk_grb)assert(v==0);for(auto v:rf.tlc)assert(v==0);
-    conservative.limit_ua=0;rendered.set_pixel(0,{255,255,255});assert(rendered.publish(rf,conservative));for(auto v:rf.sk_grb)assert(v==0);assert(rf.power.limited_ua==0);
-    uint16_t prior=0;for(unsigned i=0;i<256;i++){auto v=gamma12(uint8_t(i));assert(v>=prior);prior=v;}assert(prior==4095);
-    for(char x:std::string("led render bipolar 7 1 2 3 -32768\n"))c=lp.feed(x);assert(c==Command::render_bipolar&&lp.args()[4]==0);for(char x:std::string("led calibration driver 1 512 256 0\n"))c=lp.feed(x);assert(c==Command::calibration_driver);
+    assert(magnitude_brightness(MagnitudeMode::unipolar, 0, 31, 255, true) ==
+           31);
+    assert(magnitude_brightness(MagnitudeMode::unipolar, 65535, 31, 255,
+                                true) == 255);
+    assert(magnitude_brightness(MagnitudeMode::bipolar, 32768, 31, 255, true) ==
+           31);
+    assert(magnitude_brightness(MagnitudeMode::bipolar, 0, 31, 255, true) ==
+           magnitude_brightness(MagnitudeMode::bipolar, 65535, 31, 255, true));
+    assert(
+        magnitude_brightness(MagnitudeMode::boolean, 0, 31, 255, true) == 31 &&
+        magnitude_brightness(MagnitudeMode::boolean, 1, 31, 255, true) == 255);
+    assert(magnitude_brightness(MagnitudeMode::enumerated, 10, 31, 255, true) >
+           31);
+    assert(magnitude_brightness(MagnitudeMode::unipolar, 65535, 31, 255,
+                                false) == 0);
+    Calibration cal = default_calibration();
+    assert(validate_calibration(cal));
+    cal.sk_gain[0] = 513;
+    assert(!validate_calibration(cal));
+    cal = default_calibration();
+    Renderer renderer;
+    IlluminationAuthority rendered;
+    RenderState rs;
+    rs.color = Palette::sound;
+    rs.magnitude = 0;
+    rs.magnitude_mode = MagnitudeMode::unipolar;
+    rs.operational = OperationalState::assigned;
+    rs.temporal = TemporalMode::steady;
+    rs.assigned = true;
+    rs.explicit_off = false;
+    renderer.set_encoder(0, rs, 100);
+    assert(renderer.render(140, rendered, cal));
+    PowerPolicy conservative = default_power_policy();
+    ElectricalFrame rf{};
+    assert(rendered.publish(rf, conservative));
+    assert(rf.tlc[kEncoderTlc[0][1]] > 0 &&
+           rf.power.limited_ua <= conservative.limit_ua);
+    rs.magnitude = 65535;
+    renderer.set_encoder(0, rs, 110);
+    renderer.render(130, rendered, cal);
+    assert(rendered.publish(rf, conservative));
+    auto halfway = rf.tlc[kEncoderTlc[0][1]];
+    renderer.render(150, rendered, cal);
+    assert(rendered.publish(rf, conservative));
+    assert(rf.tlc[kEncoderTlc[0][1]] >= halfway);
+    rs.magnitude_mode = MagnitudeMode::bipolar;
+    rs.magnitude = 32768;
+    renderer.set_encoder(1, rs, UINT32_MAX - 10);
+    assert(renderer.render(20, rendered, cal));
+    renderer.all_off();
+    assert(renderer.render(21, rendered, cal));
+    assert(rendered.publish(rf, conservative));
+    for (auto v : rf.sk_grb)
+        assert(v == 0);
+    for (auto v : rf.tlc)
+        assert(v == 0);
+    conservative.limit_ua = 0;
+    rendered.set_pixel(0, {255, 255, 255});
+    assert(rendered.publish(rf, conservative));
+    for (auto v : rf.sk_grb)
+        assert(v == 0);
+    assert(rf.power.limited_ua == 0);
+    uint16_t prior = 0;
+    for (unsigned i = 0; i < 256; i++) {
+        auto v = gamma12(uint8_t(i));
+        assert(v >= prior);
+        prior = v;
+    }
+    assert(prior == 4095);
+    for (char x : std::string("led render bipolar 7 1 2 3 -32768\n"))
+        c = lp.feed(x);
+    assert(c == Command::render_bipolar && lp.args()[4] == 0);
+    for (char x : std::string("led calibration driver 1 512 256 0\n"))
+        c = lp.feed(x);
+    assert(c == Command::calibration_driver);
 }

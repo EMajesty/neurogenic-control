@@ -15,3 +15,9 @@ CMake/CI fails if they differ. Replace the example only after powered-off cable
 tracing and owner approval. Raw diagnostics remain useful beforehand.
 
 HW-003 derives addressable pixel spans from enabled module type and physical MOD1..MOD8 cable order. Repeated designs remain distinct instances. Unused ports need an electrically verified bypass/termination arrangement if downstream DIN continuity is required. The 58-pixel total, cable order and external arcade LED wiring remain owner bring-up checks, not inferred facts.
+
+HW-005 exports seven proposed standalone profiles with `neurogenic_diag.py
+harness --profile PROFILE --output FILE`: brain-only, either button design,
+navigation, encoder, pad, and complete reference. Register counts come from the
+manifest. Proposals are not identity detection, are not written to flash, and
+require operator approval before replacing the provisional file.

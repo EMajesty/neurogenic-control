@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://neurogenic.dev/schemas/diagnostic-report-v1.json",
+  "title": "NEUROGENIC manufactured-board acceptance report",
+  "type": "object",
+  "required": ["schema_version", "overall_status", "firmware_identity", "stages", "measurements"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "fixture": {"type": "boolean"},
+    "overall_status": {"enum": ["PASS", "FAIL", "NOT RUN", "BLOCKED", "UNKNOWN"]},
+    "firmware_identity": {"type": "object"},
+    "stages": {
+      "type": "array",
+      "minItems": 15,
+      "maxItems": 15,
+      "items": {
+        "type": "object",
+        "required": ["id", "status", "expected", "observed", "automated", "operator_confirmations"],
+        "properties": {
+          "status": {"enum": ["PASS", "FAIL", "NOT RUN", "BLOCKED", "UNKNOWN"]}
+        }
+      }
+    },
+    "measurements": {"type": "object"}
+  },
+  "additionalProperties": true
+}

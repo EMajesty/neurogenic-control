@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Generate/check bounded harness configuration from an explicit JSON file."""
-import argparse,json,pathlib,sys
+import argparse,hashlib,json,pathlib,sys
 ROOT=pathlib.Path(__file__).resolve().parents[1];SRC=ROOT/'hardware/harness.example.json';OUT=ROOT/'firmware/generated/harness_config.hpp'
 TYPES={'unused':0,'buttons-1x8':8,'buttons-2x5':16,'nav':8,'pads':16,'encoders':24}
 def render():
  d=json.loads(SRC.read_text());p=d.get('ports',[]);errors=[]
+ fingerprint=hashlib.sha256(SRC.read_bytes()).hexdigest()
  if d.get('schema_version')!=1:errors.append('schema_version must be 1')
  if len(p)!=9 or [x.get('port') for x in p]!=[f'MOD{i}' for i in range(1,9)]+['ENC']:errors.append('ports must be ordered MOD1..MOD8,ENC')
  names=set()
@@ -25,7 +26,7 @@ def render():
 // GENERATED from hardware/harness.example.json; PROVISIONAL, NOT OWNER-APPROVED.
 #include <array>
 #include <cstdint>
-namespace ng::harness {{inline constexpr char status[]="{d['status']}";inline constexpr std::array<uint8_t,9> chain_bits={{{bits}}};inline constexpr std::array<bool,9> enabled={{{enabled}}};inline constexpr std::array<uint8_t,9> module_type={{{types}}};inline constexpr std::array<uint8_t,8> pixel_offset={{{','.join(map(str,offsets))}}};inline constexpr std::array<uint8_t,8> pixel_count={{{','.join(map(str,counts))}}};inline constexpr uint8_t total_pixels={offset};}}
+namespace ng::harness {{inline constexpr uint16_t schema_version={d['schema_version']};inline constexpr char sha256[]="{fingerprint}";inline constexpr char status[]="{d['status']}";inline constexpr std::array<uint8_t,9> chain_bits={{{bits}}};inline constexpr std::array<bool,9> enabled={{{enabled}}};inline constexpr std::array<uint8_t,9> module_type={{{types}}};inline constexpr std::array<uint8_t,8> pixel_offset={{{','.join(map(str,offsets))}}};inline constexpr std::array<uint8_t,8> pixel_count={{{','.join(map(str,counts))}}};inline constexpr uint8_t total_pixels={offset};}}
 '''
 def main():
  a=argparse.ArgumentParser();a.add_argument('--check',action='store_true');x=a.parse_args();s=render()

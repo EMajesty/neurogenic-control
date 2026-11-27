@@ -25,3 +25,8 @@ The initial bounded GPIO implementation uses direct GPIO writes with short cycle
 Manufacturer bases: OPSCO `SK6812MINI-E` Rev. 02 and Texas Instruments `TLC5947` SBVS114B. Timing here is an implementation target, not a scope measurement.
 
 HW-004 corrected the final-bit boundary: DMA completion and FIFO-empty are insufficient because the OSR may still be shifting. Service now clears and waits for the state machine's TXSTALL flag, proving it returned to the empty-FIFO pull after the final bit, before beginning the 100 us reset interval. The fixed active buffer remains owned through reset. TLC retains 288 production-serializer edges and one latch under shared ownership. Its cycle-delayed GPIO transaction is admitted only with 120 us scheduling slack; actual duration relative to the 250 us scan period still requires target GPIO timing and oscilloscope measurement.
+
+HW-005 bounds repeated TLC deferral to 50 ms while retaining exclusive shared
+clock ownership, complete 288-bit transfer, one XLAT pulse, clock-idle-low and a
+fresh subsequent snapshot. Forced admission is visible as scan jitter/missed
+deadlines. SK completion still waits for PIO TXSTALL, then enforces 100 us reset.

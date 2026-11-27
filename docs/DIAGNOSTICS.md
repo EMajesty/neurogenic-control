@@ -16,6 +16,30 @@ The device path is mandatory; arbitrary serial devices are never opened. A
 plain terminal remains sufficient. Slow consumers may lose diagnostic output,
 but do not block scanning; inspect stats afterward.
 
+## Diagnostic interface version 1
+
+`info` returns deterministic `NGD1` identity and capability lines containing
+firmware, exact source plus dirty state, hardware baseline, manifest/harness/
+calibration SHA-256 values, Pico SDK and diagnostic version. `inventory` and
+`module 0..8` expose configured chain lengths and raw states without claiming
+electrical presence. `stats` includes mean/min/max scan intervals and all input,
+shared-clock and illumination counters. `stress start 1..300`, `stress status`
+and `stress stop` run a bounded current-limited pattern; completion queues
+all-off. `heartbeat` maintains an explicitly enabled illumination session.
+
+```sh
+python3 tools/neurogenic_diag.py info --device /dev/ttyACM0
+python3 tools/neurogenic_diag.py raw --device /dev/ttyACM0
+python3 tools/neurogenic_diag.py stress --device /dev/ttyACM0
+python3 tools/neurogenic_diag.py harness --profile one-1x8 --output proposed.json
+python3 tools/neurogenic_diag.py bringup --report acceptance.json
+```
+
+The 30-second illumination watchdog blanks TLC and queues SK all-off when no
+command/heartbeat is observed. It cannot sense the external rail or guarantee
+shutdown after MCU power loss. Guided reports and status rules are documented
+in `DIAGNOSTIC_REPORT_FORMAT.md`.
+
 ## Safe LED diagnostics
 
 Confirm the external current-limited 5 V LED rail before `led enable`; USB power alone is insufficient and no rail-sense input exists. Commands include `led status`, `led pixel I R G B`, `led encoder I R G B`, `led channel I VALUE`, `led brightness V`, the three `led walk` variants, `led test rgb`, `led test white`, `led stop`, `led off`, and `led disable`. Pixel, encoder and TLC indices are 0..57, 0..7 and 0..23. Animations are nonblocking and every request uses the same limiter.

@@ -19,3 +19,8 @@ counts, fingerprint, feedback behavior and fallback. It must not reinterpret
 an existing wire ID or unilaterally increment a protocol number here.
 
 HW-004 implements local rendering/calibration facilities exercised only through bounded standalone diagnostics. It does not claim that protocol 1.3 transports the added operational/calibration representation and does not advertise a new capability. The host remains authoritative for RGB, normalized magnitude and operational meaning; future negotiation must coordinate any richer representation.
+
+HW-005 diagnostic version 1 is CDC text, not protocol 1.3 framing. The proposed
+joint extension at upstream revision `ae66cee8b526cd999c2e957ecf1302080a92aaff`
+is in `HW_006_PROTOCOL_PROPOSAL.md`: preserve the 67-control fallback and keep
+optional push inputs separate from encoder-light destinations.

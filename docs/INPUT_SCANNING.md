@@ -25,3 +25,9 @@ index and sequence. Overflow is sticky and requires authoritative snapshot
 reconciliation. The shared-clock owner rejects overlap; future TLC output must
 shift all 288 bits, never latch partial data, release clock low, and request a
 fresh snapshot. HW-003 now implements the bounded TLC transaction and admits it only with scheduling slack. SK6812 output is independent PIO/DMA on GPIO22. Deferred/contention counters expose overload; actual serial rate, scan jitter and maximum interruption remain physical measurements.
+
+HW-005 reports arithmetic mean interval from a bounded 64-bit accumulator. TLC
+uses normal 120 us slack admission and a 50 ms maximum deferral; forced
+admission may delay one scan but prevents indefinite LED starvation. Ownership
+still excludes scans and the next scan begins with parallel load. Target timing
+at each configured 2–8 kHz rate remains an oscilloscope acceptance item.

@@ -3,6 +3,8 @@
 #include <array>
 #include <cstdint>
 namespace ng::hw {
+inline constexpr uint16_t manifest_schema_version = 1;
+inline constexpr char manifest_sha256[] = "ea45ba006c3d237d7386a2bdac1f698b459c63c7a80e3c385189a7e96300bcc7";
 inline constexpr char hardware_baseline[] = "dfa14009539741f9b325898556ced2ca027bf737";
 inline constexpr uint8_t scan_clk=14, scan_load=15;
 inline constexpr std::array<uint8_t,9> serial_data={13,12,11,10,9,8,7,6,20};
@@ -10,4 +12,6 @@ inline constexpr uint8_t enc_led_data=21, rgb_data=22, enc_led_latch=18, enc_led
 inline constexpr uint8_t max_scan_clocks=24;
 inline constexpr uint16_t tlc_frame_bits=288;
 inline constexpr std::array<std::array<uint8_t,3>,8> encoder_tlc_rgb={{{9,10,11},{12,13,14},{6,7,8},{15,16,17},{3,4,5},{18,19,20},{2,1,0},{23,22,21}}};
+inline constexpr std::array<const char*,6> module_type_name={"unused","buttons-1x8","buttons-2x5","nav","pads","encoders"};
+inline constexpr std::array<std::array<const char*,24>,6> module_bit_name={{{"","","","","","","","","","","","","","","","","","","","","","","",""},{"SW7","SW6","SW5","SW8","SW1","SW4","SW3","SW2","","","","","","","","","","","","","","","",""},{"NC","NC","NC","SW10","SW9","SW8","SW7","SW6","NC","NC","NC","SW1","SW2","SW3","SW4","SW5","","","","","","","",""},{"SW5","SW6","SW7","DATA.S1","DATA.B","DATA.A","SW3","SW2","","","","","","","","","","","","","","","",""},{"B16","B15","B14","B13","B12","B11","B10","B9","B8","B7","B6","B5","B4","B3","B2","B1","","","","","","","",""},{"P6_SW","P8_SW","P2_SW","P4_SW","P3_SW","P1_SW","P7_SW","P5_SW","P8_A","P8_B","P6_B","P6_A","P5_B","P5_A","P7_A","P7_B","P4_A","P4_B","P2_B","P2_A","P1_B","P1_A","P3_A","P3_B"}}};
 }

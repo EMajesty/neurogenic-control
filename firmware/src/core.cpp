@@ -40,6 +40,7 @@ bool Scanner::scan(RawSnapshot &out) {
     stats_.scans++;
     if (stats_.last_us) {
         auto d = end - stats_.last_us;
+        stats_.interval_total_us += d;
         stats_.min_interval_us = std::min(stats_.min_interval_us, d);
         stats_.max_interval_us = std::max(stats_.max_interval_us, d);
         if (d > period_us_ + period_us_ / 2)
@@ -190,10 +191,17 @@ Command CommandParser::feed(char c) {
     const char *x = b_.data();
     unsigned a = 0, d = 0, e = 0, f = 0, g = 0;
     int signed_value = 0;
+    char trailing = 0;
     if (!std::strcmp(x, "help"))
         out = Command::help;
     else if (!std::strcmp(x, "version"))
         out = Command::version;
+    else if (!std::strcmp(x, "info"))
+        out = Command::info;
+    else if (!std::strcmp(x, "inventory"))
+        out = Command::inventory;
+    else if (std::sscanf(x, "module %u %c", &a, &trailing) == 1 && a < 9)
+        out = Command::module;
     else if (!std::strcmp(x, "hardware"))
         out = Command::hardware;
     else if (!std::strcmp(x, "ports"))
@@ -214,6 +222,15 @@ Command CommandParser::feed(char c) {
         out = Command::stream_off;
     else if (!std::strcmp(x, "reset-stats"))
         out = Command::reset_stats;
+    else if (!std::strcmp(x, "heartbeat"))
+        out = Command::heartbeat;
+    else if (!std::strcmp(x, "stress stop"))
+        out = Command::stress_stop;
+    else if (!std::strcmp(x, "stress status"))
+        out = Command::stress_status;
+    else if (std::sscanf(x, "stress start %u %c", &a, &trailing) == 1 &&
+             a >= 1 && a <= 300)
+        out = Command::stress_start;
     else if (!std::strcmp(x, "led enable"))
         out = Command::led_enable;
     else if (!std::strcmp(x, "led disable"))
@@ -245,29 +262,63 @@ Command CommandParser::feed(char c) {
         out = Command::led_channel;
     else if (std::sscanf(x, "led brightness %u", &a) == 1 && a < 256)
         out = Command::led_brightness;
-    else if (!std::strcmp(x, "led render status")) out=Command::render_status;
-    else if (!std::strcmp(x, "led render stop")) out=Command::render_stop;
-    else if (!std::strcmp(x, "led calibration reset")) out=Command::calibration_reset;
-    else if (!std::strcmp(x, "led calibration export")) out=Command::calibration_export;
-    else if (!std::strcmp(x, "led calibration ramp")) out=Command::calibration_ramp;
-    else if (!std::strcmp(x, "led calibration compare")) out=Command::calibration_compare;
-    else if (!std::strcmp(x, "led render gamma linear")) out=Command::render_gamma_linear;
-    else if (!std::strcmp(x, "led render gamma quadratic")) out=Command::render_gamma_quadratic;
-    else if (std::sscanf(x,"led render encoder %u %u %u %u %u",&a,&d,&e,&f,&g)==5&&a<8&&d<256&&e<256&&f<256&&g<65536) out=Command::render_encoder;
-    else if (std::sscanf(x,"led render bipolar %u %u %u %u %d",&a,&d,&e,&f,&signed_value)==5&&a<8&&d<256&&e<256&&f<256&&signed_value>=-32768&&signed_value<=32767){out=Command::render_bipolar;g=uint16_t(signed_value+32768);}
-    else if (std::sscanf(x,"led render unassigned %u",&a)==1&&a<8) out=Command::render_unassigned;
-    else if (std::sscanf(x,"led render unavailable %u",&a)==1&&a<8) out=Command::render_unavailable;
-    else if (std::sscanf(x,"led render minimum %u",&a)==1&&a<=128) out=Command::render_minimum;
-    else if (std::sscanf(x,"led render transition %u",&a)==1&&a<=1000) out=Command::render_transition;
-    else if (std::sscanf(x,"led render animation %u %u",&a,&d)==2&&a<8&&d<=5) out=Command::render_animation;
-    else if (std::sscanf(x,"led calibration driver %u %u %u %u",&a,&d,&e,&f)==4&&a<2&&d<=512&&e<=512&&f<=512) out=Command::calibration_driver;
-    else if (std::sscanf(x,"led calibration encoder %u %u %u %u",&a,&d,&e,&f)==4&&a<8&&d<=512&&e<=512&&f<=512) out=Command::calibration_encoder;
-    else if (std::sscanf(x,"led calibration pixel %u %u %u %u",&a,&d,&e,&f)==4&&a<58&&d<=512&&e<=512&&f<=512) out=Command::calibration_pixel;
-    if (out == Command::led_pixel || out == Command::led_encoder ||
+    else if (!std::strcmp(x, "led render status"))
+        out = Command::render_status;
+    else if (!std::strcmp(x, "led render stop"))
+        out = Command::render_stop;
+    else if (!std::strcmp(x, "led calibration reset"))
+        out = Command::calibration_reset;
+    else if (!std::strcmp(x, "led calibration export"))
+        out = Command::calibration_export;
+    else if (!std::strcmp(x, "led calibration ramp"))
+        out = Command::calibration_ramp;
+    else if (!std::strcmp(x, "led calibration compare"))
+        out = Command::calibration_compare;
+    else if (!std::strcmp(x, "led render gamma linear"))
+        out = Command::render_gamma_linear;
+    else if (!std::strcmp(x, "led render gamma quadratic"))
+        out = Command::render_gamma_quadratic;
+    else if (std::sscanf(x, "led render encoder %u %u %u %u %u", &a, &d, &e, &f,
+                         &g) == 5 &&
+             a < 8 && d < 256 && e < 256 && f < 256 && g < 65536)
+        out = Command::render_encoder;
+    else if (std::sscanf(x, "led render bipolar %u %u %u %u %d", &a, &d, &e, &f,
+                         &signed_value) == 5 &&
+             a < 8 && d < 256 && e < 256 && f < 256 && signed_value >= -32768 &&
+             signed_value <= 32767) {
+        out = Command::render_bipolar;
+        g = uint16_t(signed_value + 32768);
+    } else if (std::sscanf(x, "led render unassigned %u", &a) == 1 && a < 8)
+        out = Command::render_unassigned;
+    else if (std::sscanf(x, "led render unavailable %u", &a) == 1 && a < 8)
+        out = Command::render_unavailable;
+    else if (std::sscanf(x, "led render minimum %u", &a) == 1 && a <= 128)
+        out = Command::render_minimum;
+    else if (std::sscanf(x, "led render transition %u", &a) == 1 && a <= 1000)
+        out = Command::render_transition;
+    else if (std::sscanf(x, "led render animation %u %u", &a, &d) == 2 &&
+             a < 8 && d <= 5)
+        out = Command::render_animation;
+    else if (std::sscanf(x, "led calibration driver %u %u %u %u", &a, &d, &e,
+                         &f) == 4 &&
+             a < 2 && d <= 512 && e <= 512 && f <= 512)
+        out = Command::calibration_driver;
+    else if (std::sscanf(x, "led calibration encoder %u %u %u %u", &a, &d, &e,
+                         &f) == 4 &&
+             a < 8 && d <= 512 && e <= 512 && f <= 512)
+        out = Command::calibration_encoder;
+    else if (std::sscanf(x, "led calibration pixel %u %u %u %u", &a, &d, &e,
+                         &f) == 4 &&
+             a < 58 && d <= 512 && e <= 512 && f <= 512)
+        out = Command::calibration_pixel;
+    if (out == Command::module || out == Command::stress_start ||
+        out == Command::led_pixel || out == Command::led_encoder ||
         out == Command::led_channel || out == Command::led_brightness)
-        args_ = {uint16_t(a), uint16_t(d), uint16_t(e), uint16_t(f),uint16_t(g),0};
-    if(out>=Command::render_encoder&&out<=Command::calibration_compare)
-        args_ = {uint16_t(a),uint16_t(d),uint16_t(e),uint16_t(f),uint16_t(g),0};
+        args_ = {uint16_t(a), uint16_t(d), uint16_t(e),
+                 uint16_t(f), uint16_t(g), 0};
+    if (out >= Command::render_encoder && out <= Command::calibration_compare)
+        args_ = {uint16_t(a), uint16_t(d), uint16_t(e),
+                 uint16_t(f), uint16_t(g), 0};
     n_ = 0;
     overflow_ = false;
     return out;

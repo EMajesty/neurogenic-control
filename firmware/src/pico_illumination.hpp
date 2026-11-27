@@ -12,6 +12,7 @@ class PicoIllumination {
     bool transfer_tlc(const ElectricalFrame &, Scanner &, uint64_t now_us);
     void enable(bool);
     bool enabled() const { return enabled_; }
+    bool tlc_pending() const { return tlc_dirty_; }
     void force_blank();
     const IlluminationStats &stats() const { return stats_; }
 

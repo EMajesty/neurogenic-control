@@ -22,3 +22,8 @@ The conservative uncharacterized model is 20 mA per SK6812 color channel, 1 mA S
 Stop immediately for unexpected current, heating, voltage collapse, unstable USB/scanning, odor, smoke or incorrect channel behavior. Remove power before changing harness connections; do not hot-plug unvalidated modules. Software limiting does not replace electrical validation.
 
 Useful commands include `led render encoder`, `led render bipolar`, `led render minimum`, `led render transition`, `led render gamma`, `led calibration driver`, `led calibration encoder`, `led calibration ramp`, `led calibration compare`, `led calibration reset`, and `led calibration export`. All still require explicit `led enable` for physical output.
+
+The HW-005 report stores calibration observations and proposed configuration
+separately from committed defaults. Identity gains remain until an operator
+completes walks and comparisons, records instruments/conditions, and explicitly
+approves an export.

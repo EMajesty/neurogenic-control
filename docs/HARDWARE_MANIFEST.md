@@ -48,3 +48,8 @@ the C++ header deterministically; CMake fails stale output. Harness generation
 is separate so board design never implies a panel instance. Encoder pushes are
 active-high after the 15 kΩ/10 kΩ divider, correcting the initial HW-001 prose
 after tracing switch/divider connectivity.
+
+HW-005 embeds the SHA-256 of the exact manifest bytes in the generated header
+and diagnostic identity. Harness and calibration files have separate hashes;
+none of these identities changes or supersedes the manufactured hardware
+baseline commit.

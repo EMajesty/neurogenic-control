@@ -62,7 +62,7 @@ struct RawSnapshot {
     uint64_t scan_index = 0, timestamp_us = 0;
 };
 struct ScanStats {
-    uint64_t scans = 0, last_us = 0,
+    uint64_t scans = 0, last_us = 0, interval_total_us = 0,
              min_interval_us = std::numeric_limits<uint64_t>::max(),
              max_interval_us = 0, max_transaction_us = 0, missed_deadlines = 0,
              bus_contention = 0, event_overflow = 0;
@@ -141,6 +141,9 @@ class Encoders {
 };
 enum class Command : uint8_t {
     help,
+    info,
+    inventory,
+    module,
     version,
     hardware,
     ports,
@@ -184,6 +187,10 @@ enum class Command : uint8_t {
     calibration_export,
     calibration_ramp,
     calibration_compare,
+    stress_start,
+    stress_stop,
+    stress_status,
+    heartbeat,
     invalid,
     too_long
 };

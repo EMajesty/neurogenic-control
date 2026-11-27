@@ -30,3 +30,8 @@ presence detection. Never hot-plug these unvalidated modules.
 Keep LEDs disabled through input validation. With power off, connect the complete intended RGB chain. Apply a current-limited external 5 V supply; measure the brain and farthest-module rails; then issue `led enable` and `led status`. Walk pixels, TLC channels and encoder colors at default 24/255 brightness, recording observed order/swaps without changing verified mappings. Briefly test RGB and current-limited white while monitoring rail voltage, supply current, regulator temperature and input `stats`. Stop for excess current, heating, rail collapse, USB instability, odor or smoke. End with `led off`, wait, `led disable`, then remove power. This does not authorize hot-plugging.
 
 After chain validation, follow `ILLUMINATION_CALIBRATION.md`: establish minimum visibility, compare primaries and driver families, measure representative current/droop/temperature, scope TLC duration and scan jitter, export proposed values, and review before committing calibration JSON. Identity defaults are not calibration evidence.
+
+HW-005 turns these stages into the resumable `neurogenic_diag.py bringup`
+workflow described in `HARDWARE_ACCEPTANCE.md`. It records explicit
+PASS/FAIL/NOT RUN/BLOCKED/UNKNOWN results and never treats missing data as
+acceptance. Save its JSON and generated Markdown together for review.
