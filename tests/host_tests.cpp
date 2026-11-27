@@ -1,8 +1,12 @@
 #include "neurogenic/core.hpp"
+#include "neurogenic/illumination.hpp"
+#include "harness_config.hpp"
 #include <array>
 #include <cassert>
 #include <string>
 using namespace ng;
+static_assert(harness::total_pixels==58&&harness::pixel_offset[5]==42&&harness::pixel_count[5]==16);
+struct TlcSim final:TlcWire{uint32_t rises=0,latches=0;bool clk=false,lat=false;void data(bool)override{}void clock(bool v)override{if(v&&!clk)rises++;clk=v;}void latch(bool v)override{if(v&&!lat)latches++;lat=v;}void half_period()override{}};
 struct Sim final:GpioBus{std::array<uint32_t,kPorts>w{};std::array<uint8_t,kPorts>pins{0,1,2,3,4,5,6,7,8};uint8_t bit=0;uint64_t now=1000;uint32_t reads=0;bool clk=false,ld=true;uint32_t read_all()override{reads++;uint32_t v=0;for(size_t i=0;i<kPorts;i++)v|=((w[i]>>bit)&1u)<<pins[i];return v;}void clock(bool v)override{if(v&&!clk)bit++;clk=v;}void load(bool v)override{ld=v;if(!v)bit=0;}void delay_us(uint32_t d)override{now+=d;}uint64_t time_us()override{return now++;}};
 static RawSnapshot snap(uint64_t t,uint32_t bits){RawSnapshot s{};s.timestamp_us=t;s.scan_index=t;s.port[0]=bits;return s;}
 int main(){
@@ -12,4 +16,8 @@ int main(){
  EventQueue<2> tiny;assert(tiny.push({})&&tiny.push({})&&!tiny.push({}));assert(tiny.overflowed());tiny.clear();assert(tiny.size()==0);
  CommandParser p;Command c=Command::invalid;for(char x:std::string("stream on\n"))c=p.feed(x);assert(c==Command::stream_on);for(size_t i=0;i<70;i++)p.feed('x');assert(p.feed('\n')==Command::too_long);
  assert(gamma12(0)==0&&gamma12(255)==4095);LogicalLight l{255,255,255,255,255,LedState::steady};CurrentBudget b{20,24,128};assert(estimate_ma(&l,1,0,b)==60);assert(budget_scale(60,b)==85);
+ IlluminationAuthority lights;PowerPolicy policy{};ElectricalFrame frame{};assert(lights.publish(frame,policy));assert(frame.power.requested_ua==58*600);lights.set_pixel(0,{1,2,3});lights.set_encoder(6,{255,128,0});assert(lights.publish(frame,policy));assert(frame.sk_grb[0]<=frame.sk_grb[1]&&frame.sk_grb[3]==0);assert(frame.tlc[2]>0&&frame.tlc[1]>0&&frame.tlc[0]==0);assert(frame.power.limited_ua<=policy.limit_ua);
+ std::array<uint16_t,kTlcChannels> channels{};channels[23]=0x801;channels[0]=1;std::array<uint8_t,kTlcBytes> wire{};serialize_tlc(channels,wire);assert(wire.size()==36&&wire[0]==0x80&&(wire[1]&0x10)&&wire[35]==1);TlcSim tlc_wire;transmit_tlc(channels,tlc_wire);assert(tlc_wire.rises==288&&tlc_wire.latches==1&&!tlc_wire.clk&&!tlc_wire.lat);
+ SkFrameQueue frames;std::array<uint8_t,kSkBytes> f1{},f2{};f1[0]=1;f2[0]=2;frames.request(f1,1);frames.request(f2,2);assert(frames.coalesced()==1);const uint8_t*data=nullptr;size_t size=0;uint32_t generation=0;assert(frames.begin(data,size,generation)&&size==174&&generation==2&&data[0]==2);assert(!frames.begin(data,size,generation));frames.complete();
+ CommandParser lp;for(char x:std::string("led pixel 57 1 2 3\n"))c=lp.feed(x);assert(c==Command::led_pixel&&lp.args()[0]==57&&lp.args()[3]==3);for(char x:std::string("led pixel 58 1 2 3\n"))c=lp.feed(x);assert(c==Command::invalid);for(char x:std::string("led channel 23 4095\n"))c=lp.feed(x);assert(c==Command::led_channel);
 }

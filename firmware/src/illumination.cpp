@@ -1,0 +1,17 @@
+#include "neurogenic/illumination.hpp"
+#include <algorithm>
+#include <cstring>
+namespace ng {
+static uint8_t gamma8(uint8_t v){return uint8_t((uint32_t(gamma12(v))*255u+2047u)/4095u);}
+static uint8_t mul8(uint8_t a,uint8_t b,uint8_t c){return uint8_t((uint32_t(a)*b*c+32512u)/65025u);}
+void IlluminationAuthority::set_pixel(size_t i,Rgb v,uint8_t b){if(i>=kSkPixels)return;pixels_[i]=v;pixel_brightness_[i]=b;dirty_=true;}
+void IlluminationAuthority::set_encoder(size_t i,Rgb v,uint8_t b){if(i>=kEncodersRgb)return;encoders_[i]=v;encoder_brightness_[i]=b;dirty_=true;}
+void IlluminationAuthority::set_channel(size_t i,uint16_t v){if(i>=kTlcChannels)return;direct_[i]=std::min<uint16_t>(v,4095);direct_valid_[i]=true;dirty_=true;}
+void IlluminationAuthority::set_global(uint8_t v){global_=v;dirty_=true;}
+void IlluminationAuthority::all_off(){pixels_={};encoders_={};direct_={};direct_valid_={};dirty_=true;}
+bool IlluminationAuthority::publish(ElectricalFrame&o,const PowerPolicy&p){if(!dirty_)return false;o={};uint64_t variable=0;auto global=std::min(global_,p.global);for(size_t i=0;i<kSkPixels;i++){auto v=pixels_[i];uint8_t g=gamma8(mul8(v.g,pixel_brightness_[i],global)),r=gamma8(mul8(v.r,pixel_brightness_[i],global)),b=gamma8(mul8(v.b,pixel_brightness_[i],global));o.sk_grb[i*3]=g;o.sk_grb[i*3+1]=r;o.sk_grb[i*3+2]=b;variable+=(uint64_t(g)+r+b)*p.sk_channel_ua/255u;}for(size_t i=0;i<8;i++){auto v=encoders_[i];uint16_t rgb[3]={gamma12(mul8(v.r,encoder_brightness_[i],global)),gamma12(mul8(v.g,encoder_brightness_[i],global)),gamma12(mul8(v.b,encoder_brightness_[i],global))};for(size_t c=0;c<3;c++)o.tlc[kEncoderTlc[i][c]]=rgb[c];}for(size_t i=0;i<24;i++){if(direct_valid_[i])o.tlc[i]=uint16_t((uint32_t(direct_[i])*global+127)/255);variable+=uint64_t(o.tlc[i])*p.tlc_channel_ua/4095u;}uint64_t quiet=uint64_t(kSkPixels)*p.sk_quiescent_ua;o.power.quiescent_ua=uint32_t(quiet);o.power.requested_ua=uint32_t(std::min<uint64_t>(UINT32_MAX,quiet+variable));uint64_t available=p.limit_ua>quiet?p.limit_ua-quiet:0;uint16_t scale=variable<=available||!variable?4095:uint16_t(available*4095u/variable);o.power.scale_q12=scale;if(scale<4095){for(auto&v:o.sk_grb)v=uint8_t((uint32_t(v)*scale+2047)/4095);for(auto&v:o.tlc)v=uint16_t((uint32_t(v)*scale+2047)/4095);}o.power.limited_ua=uint32_t(std::min<uint64_t>(p.limit_ua,quiet+(variable*scale+2047)/4095));o.generation=++generation_;dirty_=false;return true;}
+void serialize_tlc(const std::array<uint16_t,24>&v,std::array<uint8_t,36>&out){out.fill(0);size_t bit=0;for(int ch=23;ch>=0;--ch)for(int b=11;b>=0;--b){if(v[ch]&(1u<<b))out[bit/8]|=uint8_t(0x80u>>(bit%8));bit++;}}
+void transmit_tlc(const std::array<uint16_t,24>&v,TlcWire&w){std::array<uint8_t,36> bytes{};serialize_tlc(v,bytes);w.clock(false);w.latch(false);for(uint8_t byte:bytes)for(int bit=7;bit>=0;--bit){w.data((byte>>bit)&1);w.clock(true);w.half_period();w.clock(false);w.half_period();}w.data(false);w.latch(true);w.half_period();w.latch(false);}
+void SkFrameQueue::request(const std::array<uint8_t,kSkBytes>&v,uint32_t g,bool off){int slot=pending_>=0?pending_:(active_==0?1:0);if(pending_>=0)coalesced_++;if(off&&active_>=0)slot=1-active_;buffers_[slot]=v;generations_[slot]=g;pending_=int8_t(slot);}
+bool SkFrameQueue::begin(const uint8_t*&d,size_t&s,uint32_t&g){if(active_>=0||pending_<0)return false;active_=pending_;pending_=-1;d=buffers_[active_].data();s=kSkBytes;g=generations_[active_];return true;}void SkFrameQueue::complete(){active_=-1;}
+}

@@ -9,4 +9,5 @@ inline constexpr std::array<uint8_t,9> serial_data={13,12,11,10,9,8,7,6,20};
 inline constexpr uint8_t enc_led_data=21, rgb_data=22, enc_led_latch=18, enc_led_blank=19;
 inline constexpr uint8_t max_scan_clocks=24;
 inline constexpr uint16_t tlc_frame_bits=288;
+inline constexpr std::array<std::array<uint8_t,3>,8> encoder_tlc_rgb={{{9,10,11},{12,13,14},{6,7,8},{15,16,17},{3,4,5},{18,19,20},{2,1,0},{23,22,21}}};
 }

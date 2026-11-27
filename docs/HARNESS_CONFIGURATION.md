@@ -13,3 +13,5 @@ disabled state. Names do not imply any musical assignment.
 Run `python3 tools/generate_harness_header.py` and commit JSON plus header.
 CMake/CI fails if they differ. Replace the example only after powered-off cable
 tracing and owner approval. Raw diagnostics remain useful beforehand.
+
+HW-003 derives addressable pixel spans from enabled module type and physical MOD1..MOD8 cable order. Repeated designs remain distinct instances. Unused ports need an electrically verified bypass/termination arrangement if downstream DIN continuity is required. The 58-pixel total, cable order and external arcade LED wiring remain owner bring-up checks, not inferred facts.

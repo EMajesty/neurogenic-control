@@ -36,5 +36,11 @@ Outputs are `build/pico/neurogenic_controller.elf`, `.uf2`, `.bin`, `.hex`, and
 python3 tools/neurogenic_diag.py --device /dev/ttyACM0 --command version
 ```
 
-Illumination is disabled, the harness is an unapproved example, and physical
-validation has not occurred.
+Illumination is disabled at boot, the harness is an unapproved example, and physical validation has not occurred. HW-003 adds PIO/DMA SK6812 and shared-clock TLC5947 drivers behind an explicit diagnostic enable and the combined 900 mA model. See [illumination drivers](docs/ILLUMINATION_DRIVERS.md), [power budget](docs/ILLUMINATION_POWER_BUDGET.md), and [HW-003 validation](docs/HW_003_VALIDATION.md).
+
+```sh
+nix develop
+cmake -S firmware -B build/pico -G Ninja
+cmake --build build/pico
+sha256sum build/pico/neurogenic_controller.uf2
+```

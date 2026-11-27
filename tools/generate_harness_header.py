@@ -16,11 +16,16 @@ def render():
   if x.get('analog') not in (None,'ANALOG1','ANALOG2','ANALOG3'):errors.append(f"{x.get('port')} invalid analog")
  if errors:raise ValueError('\n'.join(errors))
  bits=','.join(str(x['chain_bits']) for x in p);enabled=','.join('true' if x['enabled'] else 'false' for x in p);codes={'unused':0,'buttons-1x8':1,'buttons-2x5':2,'nav':3,'pads':4,'encoders':5};types=','.join(str(codes[x['module_type']]) for x in p)
+ led_counts={'unused':0,'buttons-1x8':8,'buttons-2x5':10,'nav':6,'pads':16,'encoders':0};counts=[];offsets=[];offset=0
+ for x in p[:8]:
+  offsets.append(offset);count=led_counts[x['module_type']] if x['enabled'] else 0;counts.append(count);offset+=count
+ assembly_count=json.loads((ROOT/'hardware/manifest.json').read_text())['assembly']['sk6812_count']
+ if offset!=assembly_count:raise ValueError(f'configured pixel count {offset} != assembly count {assembly_count}')
  return f'''#pragma once
 // GENERATED from hardware/harness.example.json; PROVISIONAL, NOT OWNER-APPROVED.
 #include <array>
 #include <cstdint>
-namespace ng::harness {{inline constexpr char status[]="{d['status']}";inline constexpr std::array<uint8_t,9> chain_bits={{{bits}}};inline constexpr std::array<bool,9> enabled={{{enabled}}};inline constexpr std::array<uint8_t,9> module_type={{{types}}};}}
+namespace ng::harness {{inline constexpr char status[]="{d['status']}";inline constexpr std::array<uint8_t,9> chain_bits={{{bits}}};inline constexpr std::array<bool,9> enabled={{{enabled}}};inline constexpr std::array<uint8_t,9> module_type={{{types}}};inline constexpr std::array<uint8_t,8> pixel_offset={{{','.join(map(str,offsets))}}};inline constexpr std::array<uint8_t,8> pixel_count={{{','.join(map(str,counts))}}};inline constexpr uint8_t total_pixels={offset};}}
 '''
 def main():
  a=argparse.ArgumentParser();a.add_argument('--check',action='store_true');x=a.parse_args();s=render()

@@ -12,6 +12,8 @@
           packages = with pkgs; [ cmake ninja clang gcc-arm-embedded python3 git picotool ];
           PICO_SDK_PATH = "${pico-sdk}";
           PICO_TOOLCHAIN_PATH = "${pkgs.gcc-arm-embedded}";
+          # Pico SDK 2.1.1 pioasm omitted <cstdint>; GCC 16 no longer supplies it transitively.
+          CXXFLAGS = "-include cstdint";
         };
         hardware = pkgs.mkShell { packages = with pkgs; [ python3 kicad ]; };
       });

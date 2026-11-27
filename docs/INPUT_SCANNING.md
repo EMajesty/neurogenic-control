@@ -24,4 +24,4 @@ Events use a fixed 64-entry ring with physical identity, transition/delta, scan
 index and sequence. Overflow is sticky and requires authoritative snapshot
 reconciliation. The shared-clock owner rejects overlap; future TLC output must
 shift all 288 bits, never latch partial data, release clock low, and request a
-fresh snapshot. Its planned 4 MHz rate is not implemented or validated here.
+fresh snapshot. HW-003 now implements the bounded TLC transaction and admits it only with scheduling slack. SK6812 output is independent PIO/DMA on GPIO22. Deferred/contention counters expose overload; actual serial rate, scan jitter and maximum interruption remain physical measurements.

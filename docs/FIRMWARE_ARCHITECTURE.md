@@ -40,3 +40,7 @@ use the same budget. This deliberately leaves regulator and logic margin. PWM
 averages do not model LED tolerances, switching peaks, wiring loss, regulator
 thermal behavior or synchronized PWM phases; software limiting never replaces
 electrical and thermal validation.
+
+## HW-003 illumination authority
+
+Logical RGB/brightness state publishes complete immutable electrical frames. The pure stage applies global brightness, gamma and one combined Q12 current scale before the driver split. SK6812 uses a two-buffer PIO/DMA publisher; TLC5947 uses the scanner's single shared-clock owner and a complete 288-bit transaction. Diagnostics use the same authority and cannot bypass the limiter. Physical identities remain separate from musical semantics.

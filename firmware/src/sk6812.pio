@@ -1,0 +1,11 @@
+.program sk6812
+.side_set 1
+; 8 MHz instruction clock: 1.25 us cell, T0H=.25 us, T1H=.875 us.
+.wrap_target
+bitloop:
+    out x, 1       side 0 [2]
+    jmp !x do_zero side 1 [1]
+    jmp bitloop    side 1 [4]
+do_zero:
+    nop            side 0 [4]
+.wrap
