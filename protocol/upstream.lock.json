@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/EMajesty/neurogenic",
+  "revision": "5f94323acff8a78059c05a4e1e508a6a7e0ced44",
+  "source_path": "include/neurogenic/controller_v2_wire.h",
+  "vendored_path": "protocol/upstream/controller_v2_wire.h",
+  "sha256": "a8778026b707d23056feb3444b53f5f1d180ada0cda596d35790eeeeec1a7575",
+  "license": "MIT",
+  "license_sha256": "a53e8ecd32c022b8f06d08fa35f49c4255aee90f654320e981d838adcf065ce5",
+  "normative_owner": "EMajesty/neurogenic",
+  "purpose": "Build-time dependency-free protocol constants; verified vendored copy"
+}

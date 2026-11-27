@@ -1,0 +1,42 @@
+#ifndef NEUROGENIC_CONTROLLER_V2_WIRE_H
+#define NEUROGENIC_CONTROLLER_V2_WIRE_H
+
+/* Dependency-free Reference Controller V2 wire constants for host and firmware.
+ * IDs describe logical controls only; board scanning and LED topology are firmware
+ * concerns. Protocol 1.3 preserves the protocol-1.x frame envelope. */
+#include <stdint.h>
+
+#define NG_CONTROLLER_PROTOCOL_MAJOR 1u
+#define NG_CONTROLLER_V2_PROTOCOL_MINOR 3u
+#define NG_CONTROLLER_V2_DEVICE_ID "neurogenic.reference-controller-v2"
+#define NG_CONTROLLER_V2_CONTROL_COUNT 67u
+#define NG_CONTROLLER_V2_BUTTON_COUNT 58u
+#define NG_CONTROLLER_V2_INVENTORY_FINGERPRINT UINT32_C(0x3256434e)
+
+enum ng_controller_v2_wire_id {
+    NG_V2_PAD_1 = 0x0100, NG_V2_PAD_16 = 0x010f,
+    NG_V2_PAGE_1 = 0x0110, NG_V2_PAGE_8 = 0x0117,
+    NG_V2_FUNCTION_1 = 0x0118, NG_V2_FUNCTION_8 = 0x011f,
+    NG_V2_PARAMETER_1 = 0x0120, NG_V2_PARAMETER_8 = 0x0127,
+    NG_V2_DATA = 0x0128,
+    NG_V2_NAV_BACK = 0x0130, NG_V2_NAV_UP = 0x0131,
+    NG_V2_NAV_ENTER = 0x0132, NG_V2_NAV_LEFT = 0x0133,
+    NG_V2_NAV_DOWN = 0x0134, NG_V2_NAV_RIGHT = 0x0135,
+    NG_V2_EDIT_MUTE = 0x0140, NG_V2_EDIT_SOLO = 0x0141,
+    NG_V2_EDIT_ARM = 0x0142, NG_V2_EDIT_TRACK = 0x0143,
+    NG_V2_EDIT_PAGE = 0x0144, NG_V2_EDIT_ERASE = 0x0145,
+    NG_V2_EDIT_UNDO = 0x0146, NG_V2_EDIT_COPY = 0x0147,
+    NG_V2_EDIT_SHIFT = 0x0148, NG_V2_EDIT_SELECT = 0x0149,
+    NG_V2_TRANSPORT_CLICK = 0x0150, NG_V2_TRANSPORT_TAP = 0x0151,
+    NG_V2_TRANSPORT_QUANT = 0x0152, NG_V2_TRANSPORT_RECORD_MODE = 0x0153,
+    NG_V2_TRANSPORT_FILL = 0x0154, NG_V2_TRANSPORT_REPEAT = 0x0155,
+    NG_V2_TRANSPORT_LOOP = 0x0156, NG_V2_TRANSPORT_RECORD = 0x0157,
+    NG_V2_TRANSPORT_STOP = 0x0158, NG_V2_TRANSPORT_PLAY = 0x0159
+};
+
+enum ng_controller_led_mode {
+    NG_LED_OFF = 0, NG_LED_STEADY = 1, NG_LED_DIM = 2,
+    NG_LED_BLINK = 3, NG_LED_PULSE = 4
+};
+
+#endif

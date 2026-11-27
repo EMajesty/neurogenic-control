@@ -1,7 +1,7 @@
 # Protocol compatibility
 
 The baseline is exactly NEUROGENIC controller protocol 1.3 at upstream commit
-`40d5b94318f9623b74d0350a8bef749cefa7947b`: identity
+`5f94323acff8a78059c05a4e1e508a6a7e0ced44`: identity
 `neurogenic.reference-controller-v2`, 67 controls and fingerprint
 `0x3256434e`. The firmware skeleton exposes versioned identity over CDC but does
 not yet claim full framing or negotiation conformance.
@@ -20,7 +20,10 @@ an existing wire ID or unilaterally increment a protocol number here.
 
 HW-004 implements local rendering/calibration facilities exercised only through bounded standalone diagnostics. It does not claim that protocol 1.3 transports the added operational/calibration representation and does not advertise a new capability. The host remains authoritative for RGB, normalized magnitude and operational meaning; future negotiation must coordinate any richer representation.
 
-HW-005 diagnostic version 1 is CDC text, not protocol 1.3 framing. The proposed
-joint extension at upstream revision `ae66cee8b526cd999c2e957ecf1302080a92aaff`
-is in `HW_006_PROTOCOL_PROPOSAL.md`: preserve the 67-control fallback and keep
-optional push inputs separate from encoder-light destinations.
+HW-005 diagnostic version 1 is CDC text, not protocol 1.3 framing. HW-006A
+audits the actual upstream codec/session at the pinned revision, vendors its
+dependency-free header with hash and license verification, and adds executable
+baseline fixtures. The independently negotiated push and encoder-RGB proposal
+retains exact 1.3 fallback; it remains provisional and is not advertised by
+firmware. See `PROTOCOL_EXTENSION_SPEC.md` and
+`PROTOCOL_COMPATIBILITY_MATRIX.md`.

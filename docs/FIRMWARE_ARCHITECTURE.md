@@ -5,9 +5,11 @@ portable core has no steady-state allocation requirement; board identification,
 raw input snapshots, debounced digital state, quadrature state, optional
 switches, logical illumination, USB transport/host state and diagnostics are
 separate interfaces. GPIO code never assigns PAGE, TRACK, SOLO or musical
-meaning. The pinned upstream protocol contract is the `neurogenic` commit
-recorded in the manifest; the dependency-free header is copied only at build
-integration time in a later protocol task, not forked here. HW-002 adds the
+meaning. HW-006A pins upstream `neurogenic` revision
+`5f94323acff8a78059c05a4e1e508a6a7e0ced44`, vendors the dependency-free wire
+header with SHA-256/license verification, and exercises it through a portable
+fixture codec. Upstream remains normative; no production binary endpoint or
+proposed extension is enabled here. HW-002 adds the
 portable scanner, fixed event queue, independent debounce, quadrature counters,
 Pico GPIO backend and bounded diagnostic parser described in `INPUT_SCANNING.md`.
 
@@ -52,3 +54,13 @@ paths. Generated manifest/harness/calibration SHA-256 values and CMake source,
 dirty-state and SDK metadata make reports traceable without timestamps. Fixed
 buffers remain bounded; the host persists evidence and firmware writes no
 configuration to flash.
+
+## Protocol conformance boundary
+
+`protocol/upstream.lock.json` is the reproducible dependency record. CMake and
+CI fail when the vendored header or generated fixture header is stale. The
+diagnostic firmware remains a permanent text-only build; HW-006C should add a
+separate production binary target only after the host commits an approved
+contract. Musical normalization and operational color stay host-owned, while
+firmware calibration, gamma, interpolation, limiting and physical scheduling
+stay firmware-owned.

@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "status": "PROVISIONAL_NOT_NORMATIVE_NOT_IMPLEMENTED",
+  "based_on_upstream_revision": "5f94323acff8a78059c05a4e1e508a6a7e0ced44",
+  "version_policy": {"proposed_minor": 4, "production_version_changed": false},
+  "capabilities": [
+    {"symbol":"CONTEXT_ENCODER_PUSH","proposed_bit":11,"inventory_namespace":"push"},
+    {"symbol":"CONTEXT_ENCODER_RGB","proposed_bit":12,"inventory_namespace":"encoder-rgb"}
+  ],
+  "push_inventory": {
+    "canonical_encoding":"UTF-8 identity, NUL, u16-le wire-id, u8 kind=1",
+    "fingerprint_algorithm":"CRC-32/ISO-HDLC",
+    "provisional_fingerprint":"0x1936cd35",
+    "entries":[
+      {"identity":"parameter.1.push","proposed_wire_id":"0x0160","rotation":"parameter.1"},
+      {"identity":"parameter.2.push","proposed_wire_id":"0x0161","rotation":"parameter.2"},
+      {"identity":"parameter.3.push","proposed_wire_id":"0x0162","rotation":"parameter.3"},
+      {"identity":"parameter.4.push","proposed_wire_id":"0x0163","rotation":"parameter.4"},
+      {"identity":"parameter.5.push","proposed_wire_id":"0x0164","rotation":"parameter.5"},
+      {"identity":"parameter.6.push","proposed_wire_id":"0x0165","rotation":"parameter.6"},
+      {"identity":"parameter.7.push","proposed_wire_id":"0x0166","rotation":"parameter.7"},
+      {"identity":"parameter.8.push","proposed_wire_id":"0x0167","rotation":"parameter.8"}
+    ]
+  },
+  "encoder_rgb_inventory": {
+    "identity_policy":"Reuse parameter.1 through parameter.8 only within LED_RENDER destination namespace",
+    "canonical_encoding":"UTF-8 identity, NUL, u16-le existing rotation wire-id, u8 kind=2",
+    "fingerprint_algorithm":"CRC-32/ISO-HDLC",
+    "provisional_fingerprint":"0x6b7c76c7",
+    "count":8
+  },
+  "inventory_response_extension": {
+    "message":"INVENTORY (existing type 13; extended payload only after proposed minor negotiation)",
+    "baseline_prefix":"u16 count=67, u32 fingerprint=0x3256434e",
+    "optional_record":"u8 namespace, u8 count, u8 entry_size=0, u8 reserved=0, u32 fingerprint",
+    "record_order":["push when negotiated","encoder-rgb when negotiated"]
+  },
+  "input_state_extension": {
+    "baseline_prefix":"u32 generation plus canonical 9-byte baseline bitmap",
+    "push_suffix":"one P1..P8 bitmap byte only when CONTEXT_ENCODER_PUSH is negotiated"
+  },
+  "cases": [
+    {"name":"baseline-fallback","negotiated_minor":3,"capabilities":[],"result":"exact 1.3 inventory and snapshot"},
+    {"name":"push-only","negotiated_minor":4,"capabilities":["CONTEXT_ENCODER_PUSH"],"result":"validate push record and one-byte push snapshot suffix"},
+    {"name":"rgb-only","negotiated_minor":4,"capabilities":["CONTEXT_ENCODER_RGB"],"result":"validate encoder-rgb record; baseline snapshot length"},
+    {"name":"both","negotiated_minor":4,"capabilities":["CONTEXT_ENCODER_PUSH","CONTEXT_ENCODER_RGB"],"result":"validate both records in canonical order"},
+    {"name":"unknown-capability","negotiated_minor":4,"capabilities":["UNKNOWN_BIT_29"],"result":"ignore bit and do not infer inventory"},
+    {"name":"wrong-push-inventory","negotiated_minor":4,"capabilities":["CONTEXT_ENCODER_PUSH"],"result":"incompatible; suppress optional input"},
+    {"name":"stale-generation","negotiated_minor":4,"capabilities":["CONTEXT_ENCODER_PUSH"],"result":"reject event and request reconciliation"}
+  ],
+  "unassigned_numbers": {"new_message_type_ids":"TBD by upstream approval"}
+}

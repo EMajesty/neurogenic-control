@@ -56,3 +56,21 @@ standalone harness profiles, bounded stress/timing diagnostics and versioned
 JSON/Markdown reports. Physical acceptance remains NOT RUN. See
 [HW-005 validation](docs/HW_005_VALIDATION.md) and the source-grounded
 [HW-006 proposal](docs/HW_006_PROTOCOL_PROPOSAL.md).
+
+HW-006A pins and audits the normative upstream 1.3 contract and adds portable
+golden-vector conformance tests without enabling a production endpoint:
+
+```sh
+python3 tools/verify_upstream_contract.py
+python3 tools/generate_protocol_fixture_header.py --check
+cmake -S . -B build/host -G Ninja
+cmake --build build/host
+ctest --test-dir build/host --output-on-failure
+```
+
+The provisional extension, compatibility matrix, and implementation handoffs
+are in [the extension specification](docs/PROTOCOL_EXTENSION_SPEC.md),
+[compatibility matrix](docs/PROTOCOL_COMPATIBILITY_MATRIX.md),
+[HW-006B handoff](docs/HW_006B_HOST_HANDOFF.md), and
+[HW-006C handoff](docs/HW_006C_FIRMWARE_HANDOFF.md). Extension identifiers are
+not authoritative until committed by the main NEUROGENIC repository.

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "status": "NORMATIVE_UPSTREAM_BASELINE",
+  "upstream_revision": "5f94323acff8a78059c05a4e1e508a6a7e0ced44",
+  "provenance": {
+    "implementation": "src/application/controller_protocol.cpp",
+    "test": "tests/controller_v2_protocol_tests.cpp",
+    "documentation": "docs/REFERENCE_CONTROLLER_V2_FIRMWARE.md"
+  },
+  "frame": {
+    "magic_le": "4e47",
+    "major": 1,
+    "maximum_payload": 256,
+    "maximum_frame": 268,
+    "crc": "CRC-16/CCITT-FALSE(poly=0x1021,init=0xffff,refin=false,refout=false,xorout=0)"
+  },
+  "inventory": {"count": 67, "buttons": 58, "encoders": 9, "fingerprint": "0x3256434e"},
+  "vectors": [
+    {"name":"hello","type":1,"sequence":1,"payload_hex":"0103","frame_hex":"4e47010102000100000001037569"},
+    {"name":"inventory","type":13,"sequence":2,"payload_hex":"43004e435632","frame_hex":"4e47010d06000200000043004e435632001e"},
+    {"name":"page-1-press-generation-7","type":4,"sequence":3,"payload_hex":"07000000100101","frame_hex":"4e470104070003000000070000001001019f26"},
+    {"name":"page-1-release-generation-7","type":4,"sequence":4,"payload_hex":"07000000100100","frame_hex":"4e47010407000400000007000000100100031f"},
+    {"name":"parameter-1-delta-plus-3","type":5,"sequence":5,"payload_hex":"0700000020010300","frame_hex":"4e470105080005000000070000002001030080af"},
+    {"name":"parameter-1-delta-minus-2","type":5,"sequence":6,"payload_hex":"070000002001feff","frame_hex":"4e470105080006000000070000002001feff72d1"},
+    {"name":"empty-input-state-generation-7","type":14,"sequence":7,"payload_hex":"07000000000000000000000000","frame_hex":"4e47010e0d000700000007000000000000000000000000a0fe"},
+    {"name":"green-steady-pad-1","type":15,"sequence":8,"payload_hex":"000100ff000080010000","frame_hex":"4e47010f0a0008000000000100ff000080010000ffab"},
+    {"name":"heartbeat-1000ms","type":10,"sequence":9,"payload_hex":"e803000000000000","frame_hex":"4e47010a080009000000e8030000000000007ac2"},
+    {"name":"reset","type":12,"sequence":10,"payload_hex":"","frame_hex":"4e47010c00000a000000b639"}
+  ],
+  "malformed": [
+    {"name":"bad-crc-button","source":"page-1-press-generation-7","mutation":"xor final byte with 0x01","expected":"reject-and-resynchronize"},
+    {"name":"oversized-length","header_hex":"4e470104010100000000","expected":"reject-before-payload-allocation"},
+    {"name":"unsupported-major","header_hex":"4e470204000000000000","expected":"reject-frame"}
+  ]
+}

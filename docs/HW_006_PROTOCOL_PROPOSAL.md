@@ -1,8 +1,10 @@
-# HW-006 negotiated protocol proposal
+# HW-006 negotiated protocol proposal (superseded by HW-006A audit)
 
-This proposal is grounded in the protocol 1.3/controller documents at upstream
-NEUROGENIC revision `ae66cee8b526cd999c2e957ecf1302080a92aaff`. It is not a
-wire change and HW-005 does not modify the upstream repository.
+This HW-005 planning note is retained for history. The current source-grounded
+proposal is [PROTOCOL_EXTENSION_SPEC.md](PROTOCOL_EXTENSION_SPEC.md), based on
+upstream `5f94323acff8a78059c05a4e1e508a6a7e0ced44`; the audited baseline is in
+[PROTOCOL_BASELINE_AUDIT.md](PROTOCOL_BASELINE_AUDIT.md). Neither is an
+implemented wire change.
 
 Keep the existing 67-control identity and inventory fingerprint as the
 mandatory baseline. Negotiate optional capabilities before using any extension:
