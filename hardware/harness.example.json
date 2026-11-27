@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "status": "PROVISIONAL_UNAPPROVED_EXAMPLE",
+  "ports": [
+    {"port":"MOD1","module_type":"buttons-1x8","logical_instance":"example-row-a","chain_bits":8,"enabled":true,"analog":null},
+    {"port":"MOD2","module_type":"buttons-1x8","logical_instance":"example-row-b","chain_bits":8,"enabled":true,"analog":null},
+    {"port":"MOD3","module_type":"buttons-2x5","logical_instance":"example-cluster-a","chain_bits":16,"enabled":true,"analog":null},
+    {"port":"MOD4","module_type":"buttons-2x5","logical_instance":"example-cluster-b","chain_bits":16,"enabled":true,"analog":null},
+    {"port":"MOD5","module_type":"nav","logical_instance":"example-navigation","chain_bits":8,"enabled":true,"analog":null},
+    {"port":"MOD6","module_type":"pads","logical_instance":"example-pads","chain_bits":16,"enabled":true,"analog":null},
+    {"port":"MOD7","module_type":"unused","logical_instance":"unused-7","chain_bits":0,"enabled":false,"analog":null},
+    {"port":"MOD8","module_type":"unused","logical_instance":"unused-8","chain_bits":0,"enabled":false,"analog":null},
+    {"port":"ENC","module_type":"encoders","logical_instance":"context-encoders","chain_bits":24,"enabled":true,"analog":null}
+  ]
+}

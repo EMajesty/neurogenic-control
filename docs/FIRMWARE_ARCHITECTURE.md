@@ -7,13 +7,15 @@ switches, logical illumination, USB transport/host state and diagnostics are
 separate interfaces. GPIO code never assigns PAGE, TRACK, SOLO or musical
 meaning. The pinned upstream protocol contract is the `neurogenic` commit
 recorded in the manifest; the dependency-free header is copied only at build
-integration time in a later protocol task, not forked here.
+integration time in a later protocol task, not forked here. HW-002 adds the
+portable scanner, fixed event queue, independent debounce, quadrature counters,
+Pico GPIO backend and bounded diagnostic parser described in `INPUT_SCANNING.md`.
 
 One bounded scan asserts shared `/PL` for a simultaneous snapshot, then clocks
 up to the longest 24-bit chain while sampling nine independent returns. Shorter
 chains ignore later clocks. A fixed per-input integrator/deadline debounce and
 quadrature state table consume snapshots; no unbounded event queue is allowed.
-The baseline schedule target is one scan transaction per 500 µs with fixed
+The baseline schedule target is one scan transaction per 250 µs with fixed
 buffers, but this is a design value, not a measured physical rate. Snapshots,
 pressed-state bitmaps and host generations reconcile held buttons and lost
 releases after USB reconnect. Invalid quadrature jumps increment diagnostics.
@@ -29,7 +31,7 @@ recovery; measure and revise it on hardware.
 Illumination is represented as hue, normalized brightness, operational state,
 global brightness and gamma separately from physical output. Pure helpers map
 8-bit perceptual values to 12-bit PWM and estimate current. Hardware SK6812 and
-TLC drivers are deferred to HW-004.
+TLC drivers are deferred to HW-003.
 
 The budget model assumes up to 20 mA per SK6812 color and 20 mA per encoder
 channel, sums PWM-weighted channel duties, defaults global brightness to 24/255

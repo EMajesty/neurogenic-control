@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Verify the checked manifest against resolved KiCad PCB netlists."""
-import json, pathlib, re, sys
+import argparse, json, pathlib, re, sys
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 def blocks(text, tag):
@@ -35,7 +35,18 @@ def pcb_components(board):
 def check(cond,msg,errors):
     if not cond: errors.append(msg)
 
+def schematic_components(path):
+    text=path.read_text(); out={}
+    for net in blocks(text,'net'):
+        name=re.search(r'\(name "([^"]+)"\)',net)
+        if not name: continue
+        for node in blocks(net,'node'):
+            ref=re.search(r'\(ref "([^"]+)"\)',node); pin=re.search(r'\(pin "([^"]+)"\)',node)
+            if ref and pin: out.setdefault(ref.group(1),{})[pin.group(1)]=name.group(1)
+    return out
+
 def main():
+    ap=argparse.ArgumentParser();ap.add_argument('--schematic-dir',type=pathlib.Path);args=ap.parse_args()
     manifest=json.loads((ROOT/'hardware/manifest.json').read_text()); errors=[]
     pcbs={b:pcb_components(b) for b in ('brain','buttons-1x8','buttons-2x5','encoders','nav','pads')}
     pico=pcbs['brain']['A1']['pads']; pico_gpio={0:1,1:2,2:4,3:5,4:6,5:7,6:9,7:10,8:11,9:12,10:14,11:15,12:16,13:17,14:19,15:20,16:21,17:22,18:24,19:25,20:26,21:27,22:29,26:31,27:32,28:34}
@@ -81,11 +92,19 @@ def main():
         for reg in spec.get('registers',[]): ids += [f"{board}:{reg['ref']}:{x}" for x in reg['bits'] if x!='NC']
     check(len(ids)==len(set(ids)),"duplicate qualified physical input",errors)
     check(manifest['assembly']['sk6812_count']==2*8+2*10+6+16,"SK6812 inventory arithmetic mismatch",errors)
+    if args.schematic_dir:
+        for board,pcb in pcbs.items():
+            sch=schematic_components(args.schematic_dir/f'{board}.net')
+            for ref in [r for r in pcb if r.startswith(('A','J','U','SW','LED'))]:
+                if ref not in sch: continue
+                for pin,net in pcb[ref]['pads'].items():
+                    if pin in sch[ref]: check(sch[ref][pin]==net,f'{board}.{ref}.{pin}: schematic {sch[ref][pin]} != PCB {net}',errors)
     if errors:
         print("MANIFEST VERIFICATION FAILED",file=sys.stderr)
         for e in errors: print(f"- {e}",file=sys.stderr)
         return 1
     print("manifest: 6 PCB netlists verified; GPIO, chains, inputs, TLC outputs, power/connector invariants OK")
     print("warning: assembly.port_assignment remains UNVERIFIED_HARNESS_ASSIGNMENT")
+    if args.schematic_dir: print("schematic: fresh exported component pin nets agree with resolved PCB nets")
     return 0
 if __name__=='__main__': raise SystemExit(main())

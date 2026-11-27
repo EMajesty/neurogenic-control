@@ -1,40 +1,40 @@
 # NEUROGENIC reference controller
 
-This repository contains the manufactured hardware design authority and the
-RP2040 firmware foundation for the NEUROGENIC reference control surface. The
-six immutable board projects live under `hardware/`; documentation starts at
-[`docs/HARDWARE_REVISION.md`](docs/HARDWARE_REVISION.md), and firmware is under
-`firmware/`. The application and normative controller protocol live in the
-separate [NEUROGENIC repository](https://github.com/EMajesty/neurogenic).
+Manufactured hardware authority and RP2040 firmware for the NEUROGENIC reference
+surface. Start with the [hardware revision](docs/HARDWARE_REVISION.md),
+[manifest](docs/HARDWARE_MANIFEST.md), [scanner](docs/INPUT_SCANNING.md),
+[harness](docs/HARNESS_CONFIGURATION.md), and [diagnostics](docs/DIAGNOSTICS.md).
 
-## Host validation
-
-Linux needs Python 3, CMake, a C++17 compiler and CTest:
+## Reproducible development and tests
 
 ```sh
+nix develop
 scripts/test.sh
+cmake -S . -B build/asan -DNEUROGENIC_SANITIZERS=ON
+cmake --build build/asan
+ctest --test-dir build/asan --output-on-failure
 ```
 
-On NixOS: `nix-shell -p python3 cmake gcc --run scripts/test.sh`.
+The lock pins nixpkgs and Pico SDK 2.1.1 with TinyUSB. The optional heavy KiCad
+shell is `nix develop .#hardware`.
 
-## Pico build and UF2
-
-Use the explicitly versioned Pico SDK release `2.1.1` (or a checkout whose SHA
-you record alongside build evidence):
+## Pico build and flash
 
 ```sh
-git clone --branch 2.1.1 --depth 1 https://github.com/raspberrypi/pico-sdk.git
-git -C pico-sdk submodule update --init
-PICO_SDK_PATH="$PWD/pico-sdk" cmake -S firmware -B build/pico \
-  -DNEUROGENIC_PICO=ON -DPICO_BOARD=pico
+nix develop
+cmake -S firmware -B build/pico -G Ninja -DPICO_BOARD=pico
 cmake --build build/pico
+arm-none-eabi-size build/pico/neurogenic_controller.elf
+picotool info build/pico/neurogenic_controller.uf2
 ```
 
-The Pico SDK emits `neurogenic_controller.uf2`. Hold BOOTSEL while connecting
-the Pico and copy the UF2 to the `RPI-RP2` mass-storage volume. A CDC terminal
-at any nominal baud can send `i` for identity or `h` for help; USB CDC ignores
-the line baud. No desktop UI, controller hardware or audio system is needed to
-build.
+Outputs are `build/pico/neurogenic_controller.elf`, `.uf2`, `.bin`, `.hex`, and
+`.elf.map`. Hold BOOTSEL while connecting the original Pico and copy the UF2 to
+`RPI-RP2`. Build directories are ignored.
 
-See the [manifest guide](docs/HARDWARE_MANIFEST.md), [architecture](docs/FIRMWARE_ARCHITECTURE.md),
-[protocol status](docs/PROTOCOL_COMPATIBILITY.md), and [bring-up plan](docs/BRINGUP_PLAN.md).
+```sh
+python3 tools/neurogenic_diag.py --device /dev/ttyACM0 --command version
+```
+
+Illumination is disabled, the harness is an unapproved example, and physical
+validation has not occurred.

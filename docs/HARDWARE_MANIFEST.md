@@ -32,7 +32,19 @@ done
 python3 tools/verify_manifest.py
 ```
 
+For a fresh schematic-to-PCB component-pin comparison:
+
+```sh
+nix develop .#hardware --command scripts/verify_schematics.sh
+```
+
 The current verifier validates committed resolved PCB netlists. Fresh schematic
 export is explicitly not verified in the present environment. Harness instance
 assignment is also `UNVERIFIED_HARNESS_ASSIGNMENT`; the repeated board designs
 cannot prove which physical cable is connected to a brain port.
+
+`tools/generate_manifest_header.py` schema-validates this JSON and generates
+the C++ header deterministically; CMake fails stale output. Harness generation
+is separate so board design never implies a panel instance. Encoder pushes are
+active-high after the 15 kΩ/10 kΩ divider, correcting the initial HW-001 prose
+after tracing switch/divider connectivity.
