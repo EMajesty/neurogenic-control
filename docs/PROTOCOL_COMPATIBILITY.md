@@ -17,3 +17,5 @@ raw standalone diagnostics. A future host-coordinated extension must negotiate
 a distinct capability and inventory, stable push and illumination identities,
 counts, fingerprint, feedback behavior and fallback. It must not reinterpret
 an existing wire ID or unilaterally increment a protocol number here.
+
+HW-004 implements local rendering/calibration facilities exercised only through bounded standalone diagnostics. It does not claim that protocol 1.3 transports the added operational/calibration representation and does not advertise a new capability. The host remains authoritative for RGB, normalized magnitude and operational meaning; future negotiation must coordinate any richer representation.

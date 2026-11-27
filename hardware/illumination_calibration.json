@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "status": "UNCALIBRATED_CONSERVATIVE_DEFAULTS",
+  "driver_gain_q8": {"sk6812": [256, 256, 256], "tlc5947": [256, 256, 256]},
+  "global_ceiling": 128,
+  "minimum_assigned": 31,
+  "transition_ms": 40,
+  "gamma_profile": "quadratic",
+  "power": {"limit_ua": 900000, "sk_channel_ua": 20000, "sk_quiescent_ua": 1000, "tlc_channel_ua": 10500}
+}

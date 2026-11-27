@@ -13,3 +13,5 @@ Defaults and assumptions:
 Every static diagnostic, walk animation and all-white request goes through the same limiter. There is no bypass command. `led status` reports requested current, limited current and Q12 scale.
 
 This is an average PWM-duty estimate. It does not bound instantaneous LED pulses, wiring drop, inrush, converter transient response or regulator temperature. Purchased Adafruit 4960 and incoming marketplace LEDs may differ. Software limiting does not replace current-limited supply tests, thermal measurements or characterization of the installed parts.
+
+HW-004 changes uncharacterized defaults to 20 mA per SK6812 color channel and 1 mA quiescent per pixel. TLC remains 10.5 mA/channel and the combined ceiling remains 900 mA. Calibration, minimum brightness, animation and diagnostics all precede the same final electrical limiter; zero budget produces zero PWM.

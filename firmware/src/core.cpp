@@ -3,15 +3,295 @@
 #include <cstdio>
 #include <cstring>
 namespace ng {
-static uint32_t sat_inc(uint32_t v){return v==UINT32_MAX?v:v+1;}
-Scanner::Scanner(GpioBus& io,std::array<PortConfig,kPorts> p,uint32_t period):io_(io),ports_(p),period_us_(std::clamp<uint32_t>(period,125,500)){}
-bool Scanner::scan(RawSnapshot& out){if(owner_!=BusOwner::none){stats_.bus_contention++;return false;}owner_=BusOwner::scan;auto start=io_.time_us();io_.clock(false);io_.load(false);io_.delay_us(1);io_.load(true);uint8_t maxbits=0;for(auto p:ports_)if(p.enabled)maxbits=std::max(maxbits,p.bits);out.port.fill(0);for(uint8_t bit=0;bit<maxbits;bit++){if(bit){io_.clock(true);io_.delay_us(1);io_.clock(false);}uint32_t pins=io_.read_all();for(size_t lane=0;lane<kPorts;lane++)if(ports_[lane].enabled&&bit<ports_[lane].bits)out.port[lane]|=((pins>>ports_[lane].gpio)&1u)<<bit;}io_.clock(false);auto end=io_.time_us();out.scan_index=++index_;out.timestamp_us=end;stats_.scans++;if(stats_.last_us){auto d=end-stats_.last_us;stats_.min_interval_us=std::min(stats_.min_interval_us,d);stats_.max_interval_us=std::max(stats_.max_interval_us,d);if(d>period_us_+period_us_/2)stats_.missed_deadlines++;}stats_.last_us=end;stats_.max_transaction_us=std::max(stats_.max_transaction_us,end-start);owner_=BusOwner::none;recovery_=false;return true;}
-bool Scanner::acquire_led(){if(owner_!=BusOwner::none){stats_.bus_contention++;return false;}owner_=BusOwner::led;return true;}void Scanner::release_led(bool fresh){if(owner_==BusOwner::led){io_.clock(false);owner_=BusOwner::none;recovery_=fresh;}}void Scanner::reset_stats(){stats_=ScanStats{};}
-Buttons::Buttons(const std::array<ButtonConfig,kMaxInputs>& c,uint32_t d):cfg_(c),debounce_us_(d){}bool Buttons::sample(const RawSnapshot&s,size_t i)const{auto c=cfg_[i];bool level=(s.port[c.port]>>c.bit)&1u;return c.active_high?level:!level;}void Buttons::baseline(const RawSnapshot&s){for(size_t i=0;i<kMaxInputs;i++)if(cfg_[i].enabled){bool v=sample(s,i);states_[i]={v,v,true,s.timestamp_us};}}
-void Buttons::update(const RawSnapshot&s,EventQueue<kEventCapacity>&q,uint32_t&seq){for(size_t i=0;i<kMaxInputs;i++){if(!cfg_[i].enabled)continue;bool v=sample(s,i);auto&st=states_[i];if(!st.initialized){st={v,v,true,s.timestamp_us};continue;}if(v!=st.raw){st.raw=v;st.changed_us=s.timestamp_us;}if(st.stable!=st.raw&&s.timestamp_us-st.changed_us>=debounce_us_){st.stable=st.raw;InputEvent e{st.stable?EventKind::press:EventKind::release,cfg_[i].identity,0,s.scan_index,++seq};q.push(e);}}}
-Encoders::Encoders(const std::array<EncoderConfig,kMaxEncoders>&c):cfg_(c){}void Encoders::baseline(const RawSnapshot&s){for(size_t i=0;i<kMaxEncoders;i++)if(cfg_[i].enabled)stats_[i].ab=uint8_t(((s.port[cfg_[i].port]>>cfg_[i].bit_a)&1u)<<1|((s.port[cfg_[i].port]>>cfg_[i].bit_b)&1u));}
-void Encoders::update(const RawSnapshot&s,EventQueue<kEventCapacity>&q,uint32_t&seq){static constexpr int8_t table[16]={0,-1,1,2,1,0,2,-1,-1,2,0,1,2,1,-1,0};for(size_t i=0;i<kMaxEncoders;i++){auto c=cfg_[i];if(!c.enabled)continue;auto&st=stats_[i];uint8_t next=uint8_t(((s.port[c.port]>>c.bit_a)&1u)<<1|((s.port[c.port]>>c.bit_b)&1u));int d=table[(st.ab<<2)|next];st.ab=next;if(d==2){st.invalid=sat_inc(st.invalid);accum_[i]=0;continue;}if(!d)continue;if(c.invert)d=-d;st.valid=sat_inc(st.valid);if(d>0){if(st.raw_position<INT64_MAX)st.raw_position++;}else if(st.raw_position>INT64_MIN)st.raw_position--;accum_[i]+=d;int n=std::max<int>(1,c.counts_per_increment);if(accum_[i]>=n||accum_[i]<=-n){int delta=accum_[i]>0?1:-1;accum_[i]=0;if(delta>0)st.cw=sat_inc(st.cw);else st.ccw=sat_inc(st.ccw);if(delta>0&&st.logical_position<INT64_MAX)st.logical_position++;if(delta<0&&st.logical_position>INT64_MIN)st.logical_position--;q.push({EventKind::encoder,c.identity,int16_t(delta),s.scan_index,++seq});}}}
-void Encoders::reset_stats(){for(auto&s:stats_){uint8_t ab=s.ab;bool p=s.push;s=EncoderStats{};s.ab=ab;s.push=p;}accum_.fill(0);}
-Command CommandParser::feed(char c){if(c!='\n'&&c!='\r'){if(n_<kMax)b_[n_++]=c;else overflow_=true;return Command::invalid;}if(!n_&&!overflow_)return Command::invalid;if(overflow_){reset();return Command::too_long;}b_[n_]=0;Command out=Command::invalid;const char*x=b_.data();unsigned a=0,d=0,e=0,f=0;if(!std::strcmp(x,"help"))out=Command::help;else if(!std::strcmp(x,"version"))out=Command::version;else if(!std::strcmp(x,"hardware"))out=Command::hardware;else if(!std::strcmp(x,"ports"))out=Command::ports;else if(!std::strcmp(x,"snapshot"))out=Command::snapshot;else if(!std::strcmp(x,"raw"))out=Command::raw;else if(!std::strcmp(x,"buttons"))out=Command::buttons;else if(!std::strcmp(x,"encoders"))out=Command::encoders;else if(!std::strcmp(x,"stats"))out=Command::stats;else if(!std::strcmp(x,"stream on"))out=Command::stream_on;else if(!std::strcmp(x,"stream off"))out=Command::stream_off;else if(!std::strcmp(x,"reset-stats"))out=Command::reset_stats;else if(!std::strcmp(x,"led enable"))out=Command::led_enable;else if(!std::strcmp(x,"led disable"))out=Command::led_disable;else if(!std::strcmp(x,"led off"))out=Command::led_off;else if(!std::strcmp(x,"led status"))out=Command::led_status;else if(!std::strcmp(x,"led stop"))out=Command::led_stop;else if(!std::strcmp(x,"led walk pixels"))out=Command::led_walk_pixels;else if(!std::strcmp(x,"led walk encoders"))out=Command::led_walk_encoders;else if(!std::strcmp(x,"led walk channels"))out=Command::led_walk_channels;else if(!std::strcmp(x,"led test rgb"))out=Command::led_test_rgb;else if(!std::strcmp(x,"led test white"))out=Command::led_test_white;else if(std::sscanf(x,"led pixel %u %u %u %u",&a,&d,&e,&f)==4&&a<58&&d<256&&e<256&&f<256)out=Command::led_pixel;else if(std::sscanf(x,"led encoder %u %u %u %u",&a,&d,&e,&f)==4&&a<8&&d<256&&e<256&&f<256)out=Command::led_encoder;else if(std::sscanf(x,"led channel %u %u",&a,&d)==2&&a<24&&d<4096)out=Command::led_channel;else if(std::sscanf(x,"led brightness %u",&a)==1&&a<256)out=Command::led_brightness;if(out==Command::led_pixel||out==Command::led_encoder||out==Command::led_channel||out==Command::led_brightness)args_={uint16_t(a),uint16_t(d),uint16_t(e),uint16_t(f)};n_=0;overflow_=false;return out;}void CommandParser::reset(){n_=0;overflow_=false;args_={};}
-uint16_t gamma12(uint8_t v){uint32_t x=v;return uint16_t((x*x*4095u+32512u)/65025u);}uint32_t estimate_ma(const LogicalLight*l,size_t n,uint16_t enc,const CurrentBudget&){uint64_t q=0;for(size_t i=0;i<n;i++)q+=(uint32_t(l[i].r)+l[i].g+l[i].b)*l[i].brightness*l[i].global;return uint32_t((q*20u+8290687u)/16581375u)+(uint32_t(enc)*20u+2047u)/4095u;}uint8_t budget_scale(uint32_t e,const CurrentBudget&b){return !e||e<=b.limit_ma?255:uint8_t(uint64_t(b.limit_ma)*255u/e);}
+static uint32_t sat_inc(uint32_t v) { return v == UINT32_MAX ? v : v + 1; }
+Scanner::Scanner(GpioBus &io, std::array<PortConfig, kPorts> p, uint32_t period)
+    : io_(io), ports_(p), period_us_(std::clamp<uint32_t>(period, 125, 500)) {}
+bool Scanner::scan(RawSnapshot &out) {
+    if (owner_ != BusOwner::none) {
+        stats_.bus_contention++;
+        return false;
+    }
+    owner_ = BusOwner::scan;
+    auto start = io_.time_us();
+    io_.clock(false);
+    io_.load(false);
+    io_.delay_us(1);
+    io_.load(true);
+    uint8_t maxbits = 0;
+    for (auto p : ports_)
+        if (p.enabled)
+            maxbits = std::max(maxbits, p.bits);
+    out.port.fill(0);
+    for (uint8_t bit = 0; bit < maxbits; bit++) {
+        if (bit) {
+            io_.clock(true);
+            io_.delay_us(1);
+            io_.clock(false);
+        }
+        uint32_t pins = io_.read_all();
+        for (size_t lane = 0; lane < kPorts; lane++)
+            if (ports_[lane].enabled && bit < ports_[lane].bits)
+                out.port[lane] |= ((pins >> ports_[lane].gpio) & 1u) << bit;
+    }
+    io_.clock(false);
+    auto end = io_.time_us();
+    out.scan_index = ++index_;
+    out.timestamp_us = end;
+    stats_.scans++;
+    if (stats_.last_us) {
+        auto d = end - stats_.last_us;
+        stats_.min_interval_us = std::min(stats_.min_interval_us, d);
+        stats_.max_interval_us = std::max(stats_.max_interval_us, d);
+        if (d > period_us_ + period_us_ / 2)
+            stats_.missed_deadlines++;
+    }
+    stats_.last_us = end;
+    stats_.max_transaction_us =
+        std::max(stats_.max_transaction_us, end - start);
+    owner_ = BusOwner::none;
+    recovery_ = false;
+    return true;
 }
+bool Scanner::acquire_led() {
+    if (owner_ != BusOwner::none) {
+        stats_.bus_contention++;
+        return false;
+    }
+    owner_ = BusOwner::led;
+    return true;
+}
+void Scanner::release_led(bool fresh) {
+    if (owner_ == BusOwner::led) {
+        io_.clock(false);
+        owner_ = BusOwner::none;
+        recovery_ = fresh;
+    }
+}
+void Scanner::reset_stats() { stats_ = ScanStats{}; }
+Buttons::Buttons(const std::array<ButtonConfig, kMaxInputs> &c, uint32_t d)
+    : cfg_(c), debounce_us_(d) {}
+bool Buttons::sample(const RawSnapshot &s, size_t i) const {
+    auto c = cfg_[i];
+    bool level = (s.port[c.port] >> c.bit) & 1u;
+    return c.active_high ? level : !level;
+}
+void Buttons::baseline(const RawSnapshot &s) {
+    for (size_t i = 0; i < kMaxInputs; i++)
+        if (cfg_[i].enabled) {
+            bool v = sample(s, i);
+            states_[i] = {v, v, true, s.timestamp_us};
+        }
+}
+void Buttons::update(const RawSnapshot &s, EventQueue<kEventCapacity> &q,
+                     uint32_t &seq) {
+    for (size_t i = 0; i < kMaxInputs; i++) {
+        if (!cfg_[i].enabled)
+            continue;
+        bool v = sample(s, i);
+        auto &st = states_[i];
+        if (!st.initialized) {
+            st = {v, v, true, s.timestamp_us};
+            continue;
+        }
+        if (v != st.raw) {
+            st.raw = v;
+            st.changed_us = s.timestamp_us;
+        }
+        if (st.stable != st.raw &&
+            s.timestamp_us - st.changed_us >= debounce_us_) {
+            st.stable = st.raw;
+            InputEvent e{st.stable ? EventKind::press : EventKind::release,
+                         cfg_[i].identity, 0, s.scan_index, ++seq};
+            q.push(e);
+        }
+    }
+}
+Encoders::Encoders(const std::array<EncoderConfig, kMaxEncoders> &c)
+    : cfg_(c) {}
+void Encoders::baseline(const RawSnapshot &s) {
+    for (size_t i = 0; i < kMaxEncoders; i++)
+        if (cfg_[i].enabled)
+            stats_[i].ab =
+                uint8_t(((s.port[cfg_[i].port] >> cfg_[i].bit_a) & 1u) << 1 |
+                        ((s.port[cfg_[i].port] >> cfg_[i].bit_b) & 1u));
+}
+void Encoders::update(const RawSnapshot &s, EventQueue<kEventCapacity> &q,
+                      uint32_t &seq) {
+    static constexpr int8_t table[16] = {0,  -1, 1, 2, 1, 0, 2,  -1,
+                                         -1, 2,  0, 1, 2, 1, -1, 0};
+    for (size_t i = 0; i < kMaxEncoders; i++) {
+        auto c = cfg_[i];
+        if (!c.enabled)
+            continue;
+        auto &st = stats_[i];
+        uint8_t next = uint8_t(((s.port[c.port] >> c.bit_a) & 1u) << 1 |
+                               ((s.port[c.port] >> c.bit_b) & 1u));
+        int d = table[(st.ab << 2) | next];
+        st.ab = next;
+        if (d == 2) {
+            st.invalid = sat_inc(st.invalid);
+            accum_[i] = 0;
+            continue;
+        }
+        if (!d)
+            continue;
+        if (c.invert)
+            d = -d;
+        st.valid = sat_inc(st.valid);
+        if (d > 0) {
+            if (st.raw_position < INT64_MAX)
+                st.raw_position++;
+        } else if (st.raw_position > INT64_MIN)
+            st.raw_position--;
+        accum_[i] += d;
+        int n = std::max<int>(1, c.counts_per_increment);
+        if (accum_[i] >= n || accum_[i] <= -n) {
+            int delta = accum_[i] > 0 ? 1 : -1;
+            accum_[i] = 0;
+            if (delta > 0)
+                st.cw = sat_inc(st.cw);
+            else
+                st.ccw = sat_inc(st.ccw);
+            if (delta > 0 && st.logical_position < INT64_MAX)
+                st.logical_position++;
+            if (delta < 0 && st.logical_position > INT64_MIN)
+                st.logical_position--;
+            q.push({EventKind::encoder, c.identity, int16_t(delta),
+                    s.scan_index, ++seq});
+        }
+    }
+}
+void Encoders::reset_stats() {
+    for (auto &s : stats_) {
+        uint8_t ab = s.ab;
+        bool p = s.push;
+        s = EncoderStats{};
+        s.ab = ab;
+        s.push = p;
+    }
+    accum_.fill(0);
+}
+Command CommandParser::feed(char c) {
+    if (c != '\n' && c != '\r') {
+        if (n_ < kMax)
+            b_[n_++] = c;
+        else
+            overflow_ = true;
+        return Command::invalid;
+    }
+    if (!n_ && !overflow_)
+        return Command::invalid;
+    if (overflow_) {
+        reset();
+        return Command::too_long;
+    }
+    b_[n_] = 0;
+    Command out = Command::invalid;
+    const char *x = b_.data();
+    unsigned a = 0, d = 0, e = 0, f = 0, g = 0;
+    int signed_value = 0;
+    if (!std::strcmp(x, "help"))
+        out = Command::help;
+    else if (!std::strcmp(x, "version"))
+        out = Command::version;
+    else if (!std::strcmp(x, "hardware"))
+        out = Command::hardware;
+    else if (!std::strcmp(x, "ports"))
+        out = Command::ports;
+    else if (!std::strcmp(x, "snapshot"))
+        out = Command::snapshot;
+    else if (!std::strcmp(x, "raw"))
+        out = Command::raw;
+    else if (!std::strcmp(x, "buttons"))
+        out = Command::buttons;
+    else if (!std::strcmp(x, "encoders"))
+        out = Command::encoders;
+    else if (!std::strcmp(x, "stats"))
+        out = Command::stats;
+    else if (!std::strcmp(x, "stream on"))
+        out = Command::stream_on;
+    else if (!std::strcmp(x, "stream off"))
+        out = Command::stream_off;
+    else if (!std::strcmp(x, "reset-stats"))
+        out = Command::reset_stats;
+    else if (!std::strcmp(x, "led enable"))
+        out = Command::led_enable;
+    else if (!std::strcmp(x, "led disable"))
+        out = Command::led_disable;
+    else if (!std::strcmp(x, "led off"))
+        out = Command::led_off;
+    else if (!std::strcmp(x, "led status"))
+        out = Command::led_status;
+    else if (!std::strcmp(x, "led stop"))
+        out = Command::led_stop;
+    else if (!std::strcmp(x, "led walk pixels"))
+        out = Command::led_walk_pixels;
+    else if (!std::strcmp(x, "led walk encoders"))
+        out = Command::led_walk_encoders;
+    else if (!std::strcmp(x, "led walk channels"))
+        out = Command::led_walk_channels;
+    else if (!std::strcmp(x, "led test rgb"))
+        out = Command::led_test_rgb;
+    else if (!std::strcmp(x, "led test white"))
+        out = Command::led_test_white;
+    else if (std::sscanf(x, "led pixel %u %u %u %u", &a, &d, &e, &f) == 4 &&
+             a < 58 && d < 256 && e < 256 && f < 256)
+        out = Command::led_pixel;
+    else if (std::sscanf(x, "led encoder %u %u %u %u", &a, &d, &e, &f) == 4 &&
+             a < 8 && d < 256 && e < 256 && f < 256)
+        out = Command::led_encoder;
+    else if (std::sscanf(x, "led channel %u %u", &a, &d) == 2 && a < 24 &&
+             d < 4096)
+        out = Command::led_channel;
+    else if (std::sscanf(x, "led brightness %u", &a) == 1 && a < 256)
+        out = Command::led_brightness;
+    else if (!std::strcmp(x, "led render status")) out=Command::render_status;
+    else if (!std::strcmp(x, "led render stop")) out=Command::render_stop;
+    else if (!std::strcmp(x, "led calibration reset")) out=Command::calibration_reset;
+    else if (!std::strcmp(x, "led calibration export")) out=Command::calibration_export;
+    else if (!std::strcmp(x, "led calibration ramp")) out=Command::calibration_ramp;
+    else if (!std::strcmp(x, "led calibration compare")) out=Command::calibration_compare;
+    else if (!std::strcmp(x, "led render gamma linear")) out=Command::render_gamma_linear;
+    else if (!std::strcmp(x, "led render gamma quadratic")) out=Command::render_gamma_quadratic;
+    else if (std::sscanf(x,"led render encoder %u %u %u %u %u",&a,&d,&e,&f,&g)==5&&a<8&&d<256&&e<256&&f<256&&g<65536) out=Command::render_encoder;
+    else if (std::sscanf(x,"led render bipolar %u %u %u %u %d",&a,&d,&e,&f,&signed_value)==5&&a<8&&d<256&&e<256&&f<256&&signed_value>=-32768&&signed_value<=32767){out=Command::render_bipolar;g=uint16_t(signed_value+32768);}
+    else if (std::sscanf(x,"led render unassigned %u",&a)==1&&a<8) out=Command::render_unassigned;
+    else if (std::sscanf(x,"led render unavailable %u",&a)==1&&a<8) out=Command::render_unavailable;
+    else if (std::sscanf(x,"led render minimum %u",&a)==1&&a<=128) out=Command::render_minimum;
+    else if (std::sscanf(x,"led render transition %u",&a)==1&&a<=1000) out=Command::render_transition;
+    else if (std::sscanf(x,"led render animation %u %u",&a,&d)==2&&a<8&&d<=5) out=Command::render_animation;
+    else if (std::sscanf(x,"led calibration driver %u %u %u %u",&a,&d,&e,&f)==4&&a<2&&d<=512&&e<=512&&f<=512) out=Command::calibration_driver;
+    else if (std::sscanf(x,"led calibration encoder %u %u %u %u",&a,&d,&e,&f)==4&&a<8&&d<=512&&e<=512&&f<=512) out=Command::calibration_encoder;
+    else if (std::sscanf(x,"led calibration pixel %u %u %u %u",&a,&d,&e,&f)==4&&a<58&&d<=512&&e<=512&&f<=512) out=Command::calibration_pixel;
+    if (out == Command::led_pixel || out == Command::led_encoder ||
+        out == Command::led_channel || out == Command::led_brightness)
+        args_ = {uint16_t(a), uint16_t(d), uint16_t(e), uint16_t(f),uint16_t(g),0};
+    if(out>=Command::render_encoder&&out<=Command::calibration_compare)
+        args_ = {uint16_t(a),uint16_t(d),uint16_t(e),uint16_t(f),uint16_t(g),0};
+    n_ = 0;
+    overflow_ = false;
+    return out;
+}
+void CommandParser::reset() {
+    n_ = 0;
+    overflow_ = false;
+    args_ = {};
+}
+uint16_t gamma12(uint8_t v) {
+    uint32_t x = v;
+    return uint16_t((x * x * 4095u + 32512u) / 65025u);
+}
+uint32_t estimate_ma(const LogicalLight *l, size_t n, uint16_t enc,
+                     const CurrentBudget &) {
+    uint64_t q = 0;
+    for (size_t i = 0; i < n; i++)
+        q += (uint32_t(l[i].r) + l[i].g + l[i].b) * l[i].brightness *
+             l[i].global;
+    return uint32_t((q * 20u + 8290687u) / 16581375u) +
+           (uint32_t(enc) * 20u + 2047u) / 4095u;
+}
+uint8_t budget_scale(uint32_t e, const CurrentBudget &b) {
+    return !e || e <= b.limit_ma ? 255
+                                 : uint8_t(uint64_t(b.limit_ma) * 255u / e);
+}
+} // namespace ng

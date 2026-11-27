@@ -1,6 +1,7 @@
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
 execute_process(COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_LIST_DIR}/../tools/generate_manifest_header.py --check RESULT_VARIABLE manifest_result)
 execute_process(COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_LIST_DIR}/../tools/generate_harness_header.py --check RESULT_VARIABLE harness_result)
-if(NOT manifest_result EQUAL 0 OR NOT harness_result EQUAL 0)
+execute_process(COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_LIST_DIR}/../tools/generate_calibration_header.py --check RESULT_VARIABLE calibration_result)
+if(NOT manifest_result EQUAL 0 OR NOT harness_result EQUAL 0 OR NOT calibration_result EQUAL 0)
   message(FATAL_ERROR "hardware manifest generated header is stale")
 endif()

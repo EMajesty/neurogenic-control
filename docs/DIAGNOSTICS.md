@@ -26,3 +26,5 @@ python3 tools/neurogenic_diag.py --device /dev/ttyACM0 --command 'led pixel 0 25
 ```
 
 Finish with `led off`, allow the frame/reset interval, then `led disable`. Do not hot-plug modules.
+
+Semantic examples: `led render encoder 0 81 188 179 32768`, `led render bipolar 0 181 138 238 -32768`, `led render minimum 31`, `led render transition 40`, `led render gamma quadratic`, and `led render animation 0 3`. Calibration commands are `led calibration driver DRIVER R G B`, `led calibration encoder INDEX R G B`, `led calibration ramp`, `led calibration compare`, `led calibration export`, and `led calibration reset`; gains are Q8 0..512 and volatile. The utility accepts `--all-off-on-exit`, which is best effort and cannot guarantee shutdown after cable loss.

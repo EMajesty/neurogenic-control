@@ -44,3 +44,5 @@ electrical and thermal validation.
 ## HW-003 illumination authority
 
 Logical RGB/brightness state publishes complete immutable electrical frames. The pure stage applies global brightness, gamma and one combined Q12 current scale before the driver split. SK6812 uses a two-buffer PIO/DMA publisher; TLC5947 uses the scanner's single shared-clock owner and a complete 288-bit transaction. Diagnostics use the same authority and cannot bypass the limiter. Physical identities remain separate from musical semantics.
+
+HW-004 inserts one portable renderer before that authority: explicit semantic RGB/state, normalized perceptual magnitude, wrap-safe temporal envelope, 40 ms interpolation, Q8 physical calibration, gamma, PWM and finally combined current limiting. The host owns musical semantics; the firmware never derives them from physical position.

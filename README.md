@@ -44,3 +44,5 @@ cmake -S firmware -B build/pico -G Ninja
 cmake --build build/pico
 sha256sum build/pico/neurogenic_controller.uf2
 ```
+
+HW-004 adds the bounded semantic renderer and generated uncalibrated defaults. See [rendering](docs/ILLUMINATION_RENDERING.md), [calibration](docs/ILLUMINATION_CALIBRATION.md), and [validation](docs/HW_004_VALIDATION.md). Protocol remains 1.3 and physical calibration is not claimed.
